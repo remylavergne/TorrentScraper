@@ -1,9 +1,6 @@
 package views.search
 
-import tornadofx.View
-import tornadofx.button
-import tornadofx.hbox
-import tornadofx.textfield
+import tornadofx.*
 
 class SearchView : View() {
 
@@ -12,6 +9,12 @@ class SearchView : View() {
     override val root = hbox {
         textfield("Value")
         button("Search")
+        button("Today") {
+            action {
+                controller.dailyFiles()
+            }
+        }
+
     }
 
 }
