@@ -1,3 +1,7 @@
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
+import models.YggResponse
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -27,30 +31,26 @@ fun main() {
     currentResponse.headers.forEach { (key, value) ->
         //println("$key : $value")
         if (key == "set-cookie") {
-            cookiesString += "; $value"
+            cookiesString += "$value; "
         }
     }
     currentUrl = currentResponse.headers["location"]!!
     currentHeaders = currentResponse.headers
 
-    // TODO: Deuxième call
     currentResponse = makeRequest(currentResponse.headers["location"]!!.replace("http", "https"), cookiesString)
 
-    println(currentResponse.body?.string())
+    val jsonObject = fromJson<JsonObject>(currentResponse.body?.string()!!)
 
-    /*while (currentUrl.isNotEmpty()) {
-        currentResponse = makeRequest(currentUrl, currentHeaders)
-        currentUrl = currentResponse.headers["Location"] ?: ""
-        currentHeaders = currentResponse.headers
+    val allKeys = jsonObject.keySet()
 
-        if (currentResponse.code == 301) {
-            println(currentResponse.body?.string())
-        }
+    val get = jsonObject.get(allKeys.first())
 
-    } */
+    println("Breakpoint")
 
-    // println(currentResponse.body)
+}
 
+inline fun <reified T> fromJson(json: String): T {
+    return Gson().fromJson(json, object: TypeToken<T>(){}.type)
 }
 
 /**
