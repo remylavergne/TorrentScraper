@@ -2,16 +2,19 @@ import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import java.security.cert.X509Certificate
+import javax.net.ssl.*
 
 
-val client = OkHttpClient().newBuilder()
+val client = getUnsafeOkHttpClient()
+    .newBuilder()
     .followRedirects(false)
     .build()
-
 val urlGeneric = "https://www2.yggtorrent.pe/engine/ajax_top_query/day"
 
 
 fun main() {
+
 
     var currentUrl: String = ""
     lateinit var currentHeaders: Headers
@@ -32,7 +35,7 @@ fun main() {
     // TODO: Deuxième call
     currentResponse = makeRequest(currentResponse.headers["location"]!!.replace("http", "https"), cookiesString)
 
-    println(currentResponse.body)
+    println(currentResponse.body?.string())
 
     /*while (currentUrl.isNotEmpty()) {
         currentResponse = makeRequest(currentUrl, currentHeaders)
@@ -48,6 +51,34 @@ fun main() {
     // println(currentResponse.body)
 
 }
+
+fun getUnsafeOkHttpClient(): OkHttpClient {
+    // Create a trust manager that does not validate certificate chains
+    val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+        }
+
+        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+        }
+
+        override fun getAcceptedIssuers() = arrayOf<X509Certificate>()
+    })
+
+    // Install the all-trusting trust manager
+    val sslContext = SSLContext.getInstance("SSL")
+    sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+    // Create an ssl socket factory with our all-trusting manager
+    val sslSocketFactory = sslContext.socketFactory
+
+    return OkHttpClient.Builder()
+        .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+        .hostnameVerifier(object : HostnameVerifier {
+            override fun verify(p0: String?, p1: SSLSession?): Boolean {
+                return true
+            }
+        }).build()
+}
+
 
 fun makeRequest(url: String, cookie: String): Response {
 
