@@ -1,3 +1,5 @@
+package enums
+
 enum class Category(value: String) {
     ALL("all"),
     MOVIE_VIDEO("2145"),
