@@ -37,8 +37,6 @@ data class YggTorrent(
             )
         }
     }
-
-
 }
 
 enum class YggEnums(val regex: Regex) {
@@ -46,4 +44,11 @@ enum class YggEnums(val regex: Regex) {
     FILENAME(Regex("\">(.+)<\\/a>")),
     ELAPSED_TIME(Regex(">(\\d+)<")),
     FILE_SIZE(Regex(">(\\d+)<"))
+}
+
+enum class YggEndpoints(val endpoint: String) {
+    DAILY("https://www2.yggtorrent.pe/engine/ajax_top_query/day"),
+    WEEKLY("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
+    MONTH("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
+
 }
