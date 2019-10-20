@@ -11,8 +11,8 @@ data class YggTorrent(
     val url: String = "",
     val filename: String = "",
     val commentsCount: String = "",
-    val elapsedTimestamp: Double = 0.0,
-    val size: String = "",
+    val elapsedTimestamp: Long = 0,
+    val size: Long = 0,
     val completions: String = "",
     val seeders: String = "",
     val leechers: String = ""
@@ -25,7 +25,16 @@ data class YggTorrent(
                 throw Exception("Wrong list !")
             }
 
-            return YggTorrent(url = YggEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "")
+            return YggTorrent(
+                url = YggEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "No url",
+                filename = YggEnums.FILENAME.regex.find(list[1])?.groupValues?.last() ?: "No name",
+                commentsCount = list[3],
+                elapsedTimestamp = YggEnums.ELAPSED_TIME.regex.find(list[4])?.groupValues?.last()?.toLong() ?: 0,
+                size = YggEnums.ELAPSED_TIME.regex.find(list[5])?.groupValues?.last()?.toLong() ?: 0,
+                completions = list[6],
+                seeders = list[7],
+                leechers = list[8]
+            )
         }
     }
 
@@ -34,7 +43,7 @@ data class YggTorrent(
 
 enum class YggEnums(val regex: Regex) {
     FILE_DETAILS_URL(Regex("=\"(.+)\">")),
-    FILENAME(Regex("\\\\\">(.+)<\\/a>")),
+    FILENAME(Regex("\">(.+)<\\/a>")),
     ELAPSED_TIME(Regex(">(\\d+)<")),
-    FILE_SIZE(Regex("<\\/div>(.+)"))
+    FILE_SIZE(Regex(">(\\d+)<"))
 }
