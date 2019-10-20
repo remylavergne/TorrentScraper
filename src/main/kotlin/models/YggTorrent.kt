@@ -25,10 +25,7 @@ data class YggTorrent(
                 throw Exception("Wrong list !")
             }
 
-            // Extract all informations needed
-
-
-            return YggTorrent()
+            return YggTorrent(url = YggEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "")
         }
     }
 
@@ -36,7 +33,7 @@ data class YggTorrent(
 }
 
 enum class YggEnums(val regex: Regex) {
-    FILE_DETAILS_URL(Regex("\"(http.+)\\\\\">")),
+    FILE_DETAILS_URL(Regex("=\"(.+)\">")),
     FILENAME(Regex("\\\\\">(.+)<\\/a>")),
     ELAPSED_TIME(Regex(">(\\d+)<")),
     FILE_SIZE(Regex("<\\/div>(.+)"))
