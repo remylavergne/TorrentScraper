@@ -20,6 +20,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.2.1")
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    implementation "org.jsoup:jsoup:1.12.1"
+
     // Tests
     testImplementation "io.mockk:mockk:1.9.3"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
