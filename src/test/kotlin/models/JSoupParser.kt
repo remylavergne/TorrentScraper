@@ -15,8 +15,28 @@ class JSoupParser {
 
             // Get Node who hold every results
             val childNodes = elements.first().childNodes().filterIsInstance<Element>()
-                .first().childNodes().filterIsInstance<Element>()
-                .filter { it.tagName() == "tbody" }
+                .first().childNodes().filterIsInstance<Element>().first { it.tagName() == "tbody" }
+                .childNodes().filterIsInstance<Element>()
+
+            // List to hold all Objects
+            val objects = mutableListOf<YggTorrent>()
+
+            // Extract all objects found
+            childNodes.forEach { element ->
+                val tempElement = element.childNodes().filterIsInstance<Element>()
+
+                val informations = mutableListOf<String>()
+
+                tempElement.forEach { subElement ->
+                    informations.add(subElement.toString().replace("\n", ""))
+                }
+
+                // Create object
+                val fromListJson = YggTorrent.fromListJson(informations)
+
+
+                println()
+            }
 
 
             println(elements)
