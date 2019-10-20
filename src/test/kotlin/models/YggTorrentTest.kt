@@ -67,7 +67,7 @@ class YggTorrentTest {
 
     @Test
     fun `json extract size`() {
-        assertThat(randomObject.size).isEqualTo(9272148554)
+        assertThat(randomObject.size).isEqualTo("9272148554")
     }
 
     @Test
@@ -117,22 +117,22 @@ class YggTorrentTest {
 
     @Test
     fun `html extract size`() {
-        assertThat(randomObjectFromHtml.size).isEqualTo(9272148554)
+        assertThat(randomObjectFromHtml.size).isEqualTo("15.38Go")
     }
 
     @Test
     fun `html extract completions`() {
-        assertThat(randomObjectFromHtml.completions).isEqualTo("1")
+        assertThat(randomObjectFromHtml.completions).isEqualTo("107")
     }
 
     @Test
     fun `html extract seeders`() {
-        assertThat(randomObjectFromHtml.seeders).isEqualTo("3")
+        assertThat(randomObjectFromHtml.seeders).isEqualTo("18")
     }
 
     @Test
     fun `html extract leechers`() {
-        assertThat(randomObjectFromHtml.leechers).isEqualTo("5")
+        assertThat(randomObjectFromHtml.leechers).isEqualTo("0")
     }
 
 

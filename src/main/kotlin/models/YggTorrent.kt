@@ -12,7 +12,7 @@ data class YggTorrent(
     val filename: String = "",
     val commentsCount: String = "",
     val elapsedTimestamp: Long = 0,
-    val size: Long = 0,
+    val size: String = "",
     val completions: String = "",
     val seeders: String = "",
     val leechers: String = ""
@@ -34,7 +34,7 @@ data class YggTorrent(
                 filename = YggJsonEnums.FILENAME.regex.find(list[1])?.groupValues?.last() ?: "No name",
                 commentsCount = list[3],
                 elapsedTimestamp = YggJsonEnums.ELAPSED_TIME.regex.find(list[4])?.groupValues?.last()?.toLong() ?: 0,
-                size = YggJsonEnums.FILE_SIZE.regex.find(list[5])?.groupValues?.last()?.toLong() ?: 0,
+                size = YggJsonEnums.FILE_SIZE.regex.find(list[5])?.groupValues?.last() ?: "",
                 completions = list[6],
                 seeders = list[7],
                 leechers = list[8]
@@ -51,10 +51,10 @@ data class YggTorrent(
                 filename = YggHtmlEnums.FILENAME.regex.find(list[1])?.groupValues?.last()?.trim() ?: "No name",
                 commentsCount = YggHtmlEnums.COMMENTS.regex.find(list[3])?.groupValues?.last()?.trim() ?: "0",
                 elapsedTimestamp = YggHtmlEnums.ELAPSED_TIME.regex.find(list[4])?.groupValues?.last()?.toLong() ?: 0,
-                size = 0,
-                completions = "",
-                seeders = "",
-                leechers = ""
+                size = YggHtmlEnums.BETWEEN_TD.regex.find(list[5])?.groupValues?.last() ?: "0",
+                completions = YggHtmlEnums.BETWEEN_TD.regex.find(list[6])?.groupValues?.last() ?: "0",
+                seeders = YggHtmlEnums.BETWEEN_TD.regex.find(list[7])?.groupValues?.last() ?: "0",
+                leechers = YggHtmlEnums.BETWEEN_TD.regex.find(list[8])?.groupValues?.last() ?: "0"
             )
         }
     }
@@ -72,7 +72,7 @@ enum class YggHtmlEnums(val regex: Regex) {
     FILENAME(Regex("\">.+\">(.+)<\\/a>")),
     COMMENTS(Regex("<td>(\\d+)[ ]*<span")),
     ELAPSED_TIME(Regex("class=\"hidden\">[ ]*(\\d+)[ ]*<\\/div>")),
-    FILE_SIZE(Regex(">(\\d+)<"))
+    BETWEEN_TD(Regex("<td>(.+)<\\/td>"))
 }
 
 enum class YggEndpoints(val endpoint: String) {
