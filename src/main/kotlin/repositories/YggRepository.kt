@@ -1,15 +1,16 @@
-package models
+package repositories
 
+import models.YggTorrent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import org.junit.jupiter.api.Test
 
-class JSoupParser {
+object YggRepository {
 
-    @Test
-    fun shouldParseHTML() {
-        //1. Fetching the HTML from a given URL
-        Jsoup.connect("https://www2.yggtorrent.pe/engine/search?name=how+to+get+away&do=search").get().run {
+    fun search(request: String): List<YggTorrent> {
+
+        val items = mutableListOf<YggTorrent>()
+
+        Jsoup.connect("https://www2.yggtorrent.pe/engine/search?name=$request&do=search").get().run {
 
             val elements = this.getElementsByClass("table-responsive results")
 
@@ -17,9 +18,6 @@ class JSoupParser {
             val childNodes = elements.first().childNodes().filterIsInstance<Element>()
                 .first().childNodes().filterIsInstance<Element>().first { it.tagName() == "tbody" }
                 .childNodes().filterIsInstance<Element>()
-
-            // List to hold all Objects
-            val items = mutableListOf<YggTorrent>()
 
             // Extract all objects found
             childNodes.forEach { element ->
@@ -36,5 +34,9 @@ class JSoupParser {
                 items.add(fromListHtml)
             }
         }
+
+        return items
     }
+
+
 }

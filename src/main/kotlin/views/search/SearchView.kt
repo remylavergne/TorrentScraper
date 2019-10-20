@@ -13,14 +13,18 @@ class SearchView : View() {
             vbox() {
                 text("Search")
                 hbox {
-                    textfield()
-                    button("Search")
+                    textfield().textProperty().bindBidirectional(controller.userInput)
+                    button("Search") {
+                        action {
+                            controller.search()
+                        }
+                    }
                 }
             }
             hbox {
                 button("Today") {
                     action {
-                        controller.dailyFiles()
+
                     }
                 }
             }
