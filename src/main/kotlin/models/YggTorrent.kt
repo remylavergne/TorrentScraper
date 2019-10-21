@@ -6,17 +6,18 @@ import java.util.*
 
 data class YggTorrent(
     val id: String = UUID.randomUUID().toString(),
-    val category: enums.Category? = null,
+    val category: Category? = null,
     val subCategory: SubCategory? = null,
-    val url: String = "",
-    val filename: String = "",
+    override val url: String = "",
+    override val filename: String = "",
     val commentsCount: String = "",
     val elapsedTimestamp: Long = 0,
     val size: String = "",
     val completions: String = "",
     val seeders: String = "",
-    val leechers: String = ""
-) {
+    val leechers: String = "",
+    override val domain: String = ""
+) : Torrent {
 
     companion object {
 
