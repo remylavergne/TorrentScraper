@@ -1,6 +1,6 @@
 package views.search
 
-import models.YggTorrent
+import models.Torrent
 import tornadofx.*
 
 class SearchView : View() {
@@ -30,10 +30,13 @@ class SearchView : View() {
             }
 
             tableview(controller.results) {
-                readonlyColumn("ID", YggTorrent::id)
-                readonlyColumn("Name", YggTorrent::filename)
-                readonlyColumn("Added", YggTorrent::elapsedTimestamp)
-                readonlyColumn("Comments", YggTorrent::commentsCount)
+                readonlyColumn("Domain", Torrent::domain)
+                readonlyColumn("Name", Torrent::filename)
+                readonlyColumn("Added", Torrent::elapsedTimestamp)
+                readonlyColumn("Comments", Torrent::commentsCount)
+                readonlyColumn("Downloads", Torrent::completions)
+                readonlyColumn("Seeders", Torrent::seeders)
+                readonlyColumn("Leechers", Torrent::leechers)
             }
 
         }
