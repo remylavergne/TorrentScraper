@@ -5,19 +5,19 @@ import enums.SubCategory
 import java.util.*
 
 data class YggTorrent(
-    val id: String = UUID.randomUUID().toString(),
-    val category: Category? = null,
-    val subCategory: SubCategory? = null,
+    override val id: String = UUID.randomUUID().toString(),
+    override val category: Category? = null,
+    override val subCategory: SubCategory? = null,
     override val url: String = "",
     override val filename: String = "",
-    val commentsCount: String = "",
-    val elapsedTimestamp: Long = 0,
-    val size: String = "",
-    val completions: String = "",
-    val seeders: String = "",
-    val leechers: String = "",
+    override val commentsCount: String = "",
+    override val elapsedTimestamp: Long = 0,
+    override val size: String = "",
+    override val completions: String = "",
+    override val seeders: String = "",
+    override val leechers: String = "",
     override val domain: String = ""
-) : Torrent {
+) : Torrent() {
 
     companion object {
 
