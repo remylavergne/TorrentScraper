@@ -1,5 +1,7 @@
 package views.search
 
+import Exts.unaccent
+import javafx.application.HostServices
 import javafx.scene.control.TableView
 import models.Torrent
 import tornadofx.*
@@ -8,6 +10,7 @@ class SearchView : View() {
 
     private val controller: SearchController by inject()
     private lateinit var tablevw: TableView<Torrent>
+    private val hostService: HostServices = hostServices
 
     override val root =
 
@@ -41,15 +44,17 @@ class SearchView : View() {
                 readonlyColumn("Leechers", Torrent::leechers)
 
                 onDoubleClick {
-                    controller.itemDoubleClicked(selectedItem)
+                    openUrl(selectedItem)
                 }
-
-                onRightClick {
-                    // Open options
-                }
-
             }
 
         }
+
+    private fun openUrl(item: Torrent?) {
+        item?.let {
+            println("${it.url} choosed.")
+            hostService.showDocument(it.url.unaccent())
+        }
+    }
 
 }
