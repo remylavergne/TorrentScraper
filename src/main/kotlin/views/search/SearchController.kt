@@ -15,6 +15,7 @@ class SearchController : Controller() {
     // Mock
     var results = mutableListOf<Torrent>(
         YggTorrent(
+            domain = "undomaineassezlong.com",
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
@@ -52,6 +53,10 @@ class SearchController : Controller() {
             this.previousRequest = this.userInput.value
             this.results.setAll(YggRepository.search(this.userInput.value.replace(" ", "+")))
         }
+    }
+
+    fun itemDoubleClicked(selectedItem: Torrent?) {
+        println(selectedItem?.filename)
     }
 
 
