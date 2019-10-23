@@ -1,9 +1,8 @@
 package views.search
 
 import Exts.unaccent
-import javafx.application.HostServices
 import javafx.event.EventHandler
-import javafx.scene.control.TableView
+import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
 import models.Torrent
 import tornadofx.*
@@ -11,8 +10,7 @@ import tornadofx.*
 class SearchView : View() {
 
     private val controller: SearchController by inject()
-    private lateinit var tablevw: TableView<Torrent>
-    private val hostService: HostServices = hostServices
+    private lateinit var progressIndicator: ProgressIndicator
 
     override val root =
 
@@ -23,15 +21,19 @@ class SearchView : View() {
                     textfield {
                         onKeyReleased = EventHandler {
                             if (it.code == KeyCode.ENTER) {
-                                controller.search()
+                                doSearch()
                             }
                         }
                     }.textProperty().bindBidirectional(controller.userInput)
                     button("Search") {
                         action {
-                            controller.search()
+                            doSearch()
                         }
                     }
+                }
+
+                progressIndicator = progressindicator {
+                    hide()
                 }
             }
             hbox {
@@ -55,12 +57,20 @@ class SearchView : View() {
                     openUrl(selectedItem)
                 }
             }
-
         }
+
+    private fun doSearch() {
+        runAsync {
+            progressIndicator.show()
+            controller.search()
+        } success {
+            progressIndicator.hide()
+        }
+    }
 
     private fun openUrl(item: Torrent?) {
         item?.let {
-            hostService.showDocument(it.url.unaccent())
+            hostServices.showDocument(it.url.unaccent())
             controller.itemDoubleClicked(it)
         }
     }
