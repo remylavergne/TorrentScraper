@@ -38,11 +38,17 @@ class YggTorrentTest {
     /**
      * Test all data parsed from JSON
      */
+
     @Test
     fun `json wrong list`() {
         assertThrows<Exception>("Wrong list !") {
             YggTorrent.fromListJson(wrongFile)
         }
+    }
+
+    @Test
+    fun `json extract domain name`() {
+        assertThat(randomObject.domain).isEqualTo("yggtorrent.pe")
     }
 
     @Test
@@ -93,6 +99,11 @@ class YggTorrentTest {
         assertThrows<Exception>("Wrong list !") {
             YggTorrent.fromListHtml(wrongFile)
         }
+    }
+
+    @Test
+    fun `html extract domain name`() {
+        assertThat(randomObjectFromHtml.domain).isEqualTo("yggtorrent.pe")
     }
 
     @Test

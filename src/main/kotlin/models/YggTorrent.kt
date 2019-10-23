@@ -31,6 +31,7 @@ data class YggTorrent(
             }
 
             return YggTorrent(
+                domain = YggJsonEnums.DOMAIN_NAME.regex.find(list[1])?.groupValues?.last() ?: "No domain",
                 url = YggJsonEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "No url",
                 filename = YggJsonEnums.FILENAME.regex.find(list[1])?.groupValues?.last() ?: "No name",
                 commentsCount = list[3],
@@ -48,6 +49,7 @@ data class YggTorrent(
             }
 
             return YggTorrent(
+                domain = YggHtmlEnums.DOMAIN_NAME.regex.find(list[1])?.groupValues?.last() ?: "No domain",
                 url = YggHtmlEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "No url",
                 filename = YggHtmlEnums.FILENAME.regex.find(list[1])?.groupValues?.last()?.trim() ?: "No name",
                 commentsCount = YggHtmlEnums.COMMENTS.regex.find(list[3])?.groupValues?.last()?.trim() ?: "0",
@@ -62,6 +64,7 @@ data class YggTorrent(
 }
 
 enum class YggJsonEnums(val regex: Regex) {
+    DOMAIN_NAME(Regex("http[s]*:\\/\\/www\\d*\\.(\\w*\\d*\\.\\w{2,4})")),
     FILE_DETAILS_URL(Regex("=\"(.+)\">")),
     FILENAME(Regex("\">(.+)<\\/a>")),
     ELAPSED_TIME(Regex(">(\\d+)<")),
@@ -69,6 +72,7 @@ enum class YggJsonEnums(val regex: Regex) {
 }
 
 enum class YggHtmlEnums(val regex: Regex) {
+    DOMAIN_NAME(Regex("http[s]*:\\/\\/www\\d*\\.(\\w*\\d*\\.\\w{2,4})")),
     FILE_DETAILS_URL(Regex("href=\"(.+)\">")),
     FILENAME(Regex("\">.+\">(.+)<\\/a>")),
     COMMENTS(Regex("<td>(\\d+)[ ]*<span")),

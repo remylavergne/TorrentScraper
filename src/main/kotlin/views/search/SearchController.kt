@@ -5,7 +5,7 @@ import models.Torrent
 import models.YggTorrent
 import repositories.YggRepository
 import tornadofx.Controller
-import tornadofx.observable
+import tornadofx.asObservable
 
 class SearchController : Controller() {
 
@@ -13,38 +13,38 @@ class SearchController : Controller() {
     private var previousRequest: String = ""
 
     // Mock
-    var results = mutableListOf(
+    var results = mutableListOf<Torrent>(
         YggTorrent(
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
             leechers = "46"
-        ) as Torrent,
+        ),
         YggTorrent(
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
             leechers = "46"
-        ) as Torrent,
+        ),
         YggTorrent(
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
             leechers = "46"
-        ) as Torrent,
+        ),
         YggTorrent(
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
             leechers = "46"
-        ) as Torrent,
+        ),
         YggTorrent(
             filename = "Le Seigneur des Anneaux",
             commentsCount = "12",
             seeders = "34",
             leechers = "46"
-        ) as Torrent
-    ).observable()
+        )
+    ).asObservable()
         private set
 
     fun search() {
