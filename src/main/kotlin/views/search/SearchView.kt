@@ -2,7 +2,9 @@ package views.search
 
 import Exts.unaccent
 import javafx.application.HostServices
+import javafx.event.EventHandler
 import javafx.scene.control.TableView
+import javafx.scene.input.KeyCode
 import models.Torrent
 import tornadofx.*
 
@@ -18,7 +20,13 @@ class SearchView : View() {
             vbox() {
                 text("Search")
                 hbox {
-                    textfield().textProperty().bindBidirectional(controller.userInput)
+                    textfield {
+                        onKeyReleased = EventHandler {
+                            if (it.code == KeyCode.ENTER) {
+                                controller.search()
+                            }
+                        }
+                    }.textProperty().bindBidirectional(controller.userInput)
                     button("Search") {
                         action {
                             controller.search()
@@ -52,8 +60,8 @@ class SearchView : View() {
 
     private fun openUrl(item: Torrent?) {
         item?.let {
-            println("${it.url} choosed.")
             hostService.showDocument(it.url.unaccent())
+            controller.itemDoubleClicked(it)
         }
     }
 

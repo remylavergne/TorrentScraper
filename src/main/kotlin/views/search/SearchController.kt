@@ -11,41 +11,10 @@ class SearchController : Controller() {
 
     var userInput: SimpleStringProperty = SimpleStringProperty()
     private var previousRequest: String = ""
+    private lateinit var lastItemChoosed: Torrent
 
     // Mock
-    var results = mutableListOf<Torrent>(
-        YggTorrent(
-            domain = "undomaineassezlong.com",
-            filename = "Le Seigneur des Anneaux",
-            commentsCount = "12",
-            seeders = "34",
-            leechers = "46"
-        ),
-        YggTorrent(
-            filename = "Le Seigneur des Anneaux",
-            commentsCount = "12",
-            seeders = "34",
-            leechers = "46"
-        ),
-        YggTorrent(
-            filename = "Le Seigneur des Anneaux",
-            commentsCount = "12",
-            seeders = "34",
-            leechers = "46"
-        ),
-        YggTorrent(
-            filename = "Le Seigneur des Anneaux",
-            commentsCount = "12",
-            seeders = "34",
-            leechers = "46"
-        ),
-        YggTorrent(
-            filename = "Le Seigneur des Anneaux",
-            commentsCount = "12",
-            seeders = "34",
-            leechers = "46"
-        )
-    ).asObservable()
+    var results = mutableListOf<Torrent>().asObservable()
         private set
 
     fun search() {
@@ -56,8 +25,8 @@ class SearchController : Controller() {
     }
 
     fun itemDoubleClicked(selectedItem: Torrent?) {
-        println(selectedItem?.filename)
+        selectedItem?.let {
+            this.lastItemChoosed = selectedItem
+        }
     }
-
-
 }

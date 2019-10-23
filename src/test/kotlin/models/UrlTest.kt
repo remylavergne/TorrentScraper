@@ -5,11 +5,11 @@ import java.text.Normalizer
 
 class UrlTest {
 
+    val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
     @Test
     fun `remove accent from url`() {
 
-        val REGEX_UNACCENT = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
         fun CharSequence.unaccent(): String {
             val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
