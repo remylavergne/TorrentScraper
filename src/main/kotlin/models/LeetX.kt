@@ -13,7 +13,7 @@ data class LeetX(
     override val commentsCount: String = "",
     override val elapsedTimestamp: Long = 0,
     override val size: String = "",
-    override val completions: String = "0",
+    override val completions: String = "-",
     override val seeders: String = "",
     override val leechers: String = "",
     override val domain: String = "1337x.to"

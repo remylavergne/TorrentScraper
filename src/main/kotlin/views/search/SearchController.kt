@@ -10,7 +10,8 @@ import tornadofx.asObservable
 
 class SearchController : Controller() {
 
-    var userInput: SimpleStringProperty = SimpleStringProperty()
+
+
     private var previousRequest: String = ""
     private lateinit var lastItemChoosed: Torrent
 
@@ -18,11 +19,15 @@ class SearchController : Controller() {
     var results = mutableListOf<Torrent>().asObservable()
         private set
 
+    // Bind values
+    var resultsCount: SimpleStringProperty = SimpleStringProperty(results.count().toString())
+    var userInput: SimpleStringProperty = SimpleStringProperty()
+
     fun search() {
         if (this.userInput.value.length >= 3 && this.userInput.value != this.previousRequest) {
             this.previousRequest = this.userInput.value
-            //this.results.setAll(YggRepository.search(this.userInput.value.replace(" ", "+")))
-            this.results.setAll(LeetXRepository.search(this.userInput.value.replace(" ", "+")))
+            this.results.addAll(YggRepository.search(this.userInput.value.replace(" ", "+")))
+            this.results.addAll(LeetXRepository.search(this.userInput.value.replace(" ", "+")))
         }
     }
 

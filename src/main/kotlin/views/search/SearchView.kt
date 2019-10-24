@@ -30,6 +30,8 @@ class SearchView : View() {
                             doSearch()
                         }
                     }
+                    text("Results: ")
+                    text("0").textProperty().bind(controller.resultsCount)
                 }
 
                 progressIndicator = progressindicator {
@@ -37,11 +39,7 @@ class SearchView : View() {
                 }
             }
             hbox {
-                button("Today") {
-                    action {
 
-                    }
-                }
             }
 
             tableview(controller.results) {
