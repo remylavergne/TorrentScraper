@@ -1,12 +1,13 @@
 package repositories
 
+import models.Torrent
 import models.YggTorrent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 
-object YggRepository {
+object YggRepository : BaseRepository() {
 
-    fun search(request: String): List<YggTorrent> {
+    override fun search(request: String): List<Torrent> {
 
         val items = mutableListOf<YggTorrent>()
 

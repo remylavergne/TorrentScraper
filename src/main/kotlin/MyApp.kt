@@ -1,7 +1,6 @@
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import models.YggResponse
 import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
