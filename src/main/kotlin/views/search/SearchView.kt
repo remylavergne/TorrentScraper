@@ -43,8 +43,8 @@ class SearchView : View() {
             }
 
             tableview(controller.results) {
-                readonlyColumn("Domain", Torrent::domain).remainingWidth().maxWidth(100)
-                readonlyColumn("Name", Torrent::filename).remainingWidth().minWidth(300).maxWidth(800)
+                readonlyColumn("Domain", Torrent::domain).maxWidth(100)
+                readonlyColumn("Name", Torrent::filename).minWidth(300).maxWidth(800)
                 readonlyColumn("Added", Torrent::elapsedTimestamp)
                 readonlyColumn("Comments", Torrent::commentsCount)
                 readonlyColumn("Downloads", Torrent::completions)
