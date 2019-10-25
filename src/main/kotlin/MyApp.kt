@@ -19,7 +19,7 @@ val client = getUnsafeOkHttpClient()
 val urlGeneric = "https://www2.yggtorrent.pe/engine/ajax_top_query/day"
 
 
-fun main() {
+fun maind() {
     var currentUrl: String = ""
     lateinit var currentHeaders: Headers
     var cookiesString: String = ""

@@ -51,6 +51,8 @@ class SearchView : View() {
                 readonlyColumn("Seeders", Torrent::seeders)
                 readonlyColumn("Leechers", Torrent::leechers)
 
+                smartResize()
+
                 onDoubleClick {
                     openUrl(selectedItem)
                 }

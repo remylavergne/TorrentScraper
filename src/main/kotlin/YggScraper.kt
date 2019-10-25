@@ -3,6 +3,11 @@ import javafx.stage.Stage
 import tornadofx.*
 import views.search.SearchView
 
+
+fun main(args: Array<String>) {
+    launch<YggScraper>(args)
+}
+
 class YggScraper : App(SearchView::class, Styles::class) {
     override fun start(stage: Stage) {
         with(stage) {
@@ -23,6 +28,3 @@ class Styles : Stylesheet() {
     }
 }
 
-fun main(args: Array<String>) {
-    launch<YggScraper>(args)
-}

@@ -6,17 +6,15 @@ import models.YggTorrent
 import repositories.LeetXRepository
 import repositories.YggRepository
 import tornadofx.Controller
-import tornadofx.asObservable
+import tornadofx.observable
 
 class SearchController : Controller() {
-
-
 
     private var previousRequest: String = ""
     private lateinit var lastItemChoosed: Torrent
 
     // Mock
-    var results = mutableListOf<Torrent>().asObservable()
+    var results = mutableListOf<Torrent>().observable()
         private set
 
     // Bind values
