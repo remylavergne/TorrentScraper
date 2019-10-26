@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element
 
 object YggRepository : BaseRepository() {
 
-    override fun search(request: String): List<Torrent> {
+    override suspend fun search(request: String): List<Torrent> {
 
         val items = mutableListOf<YggTorrent>()
 

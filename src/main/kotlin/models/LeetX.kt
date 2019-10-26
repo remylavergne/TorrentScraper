@@ -11,7 +11,7 @@ data class LeetX(
     override val url: String = "",
     override val filename: String = "",
     override val commentsCount: String = "",
-    override val elapsedTimestamp: Long = 0,
+    override val elapsedTimestamp: Long = System.currentTimeMillis(),
     override val size: String = "",
     override val completions: String = "-",
     override val seeders: String = "",

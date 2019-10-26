@@ -66,6 +66,6 @@ abstract class BaseRepository {
         return this.unsafeClient.newCall(request).execute()
     }
 
-    abstract fun search(request: String): List<Torrent>
+    abstract suspend fun search(request: String): List<Torrent>
 
 }

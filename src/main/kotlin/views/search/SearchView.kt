@@ -5,6 +5,8 @@ import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import models.Torrent
 import tornadofx.*
 
@@ -83,14 +85,11 @@ class SearchView : View("Torrent Search Engine") {
     private fun doSearch() {
         controller.userInput.value?.let {
             if (it.count() >= 3) {
-                runAsync {
-                    progressIndicator.show()
+                progressIndicator.show()
+                GlobalScope.launch {
                     controller.search()
-                } success {
                     progressIndicator.hide()
                 }
-            } else {
-                // TODO: Popup ?
             }
         }
     }

@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element
 
 object LeetXRepository : BaseRepository() {
 
-    override fun search(request: String): List<Torrent> {
+    override suspend fun search(request: String): List<Torrent> {
 
         val leetXs = mutableListOf<LeetX>()
         val url = "https://1337x.to/search/$request/1/"
