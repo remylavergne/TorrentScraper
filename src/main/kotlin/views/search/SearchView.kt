@@ -4,6 +4,7 @@ import Exts.unaccent
 import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
+import javafx.scene.paint.Color
 import models.Torrent
 import tornadofx.*
 
@@ -13,12 +14,20 @@ class SearchView : View() {
     private lateinit var progressIndicator: ProgressIndicator
 
     override val root =
-
-        form {
-            vbox() {
-                text("Search")
+        // TODO: Convert to BorderPane
+        vbox {
+            /** Search input */
+            vbox {
+                paddingTop = 10
+                paddingLeft = 10
+                text("Search") {
+                    spacing = 5.0
+                }
                 hbox {
+                    fitToParentWidth()
                     textfield {
+                        minWidth = 500.0
+                        spacing = 20.0
                         onKeyReleased = EventHandler {
                             if (it.code == KeyCode.ENTER) {
                                 doSearch()
@@ -26,45 +35,63 @@ class SearchView : View() {
                         }
                     }.textProperty().bindBidirectional(controller.userInput)
                     button("Search") {
+                        style {
+                            baseColor = Color.AQUA
+                        }
                         action {
                             doSearch()
                         }
                     }
+
+                    progressIndicator = progressindicator {
+                        fitToParentHeight()
+                        hide()
+                    }
+                }
+
+                hbox {
+                    paddingTop = 10
                     text("Results: ")
                     text("0").textProperty().bind(controller.resultsCount)
                 }
 
-                progressIndicator = progressindicator {
-                    hide()
-                }
             }
+
+            /** TableView */
             hbox {
+                paddingTop = 10
+                fitToParentWidth()
+                tableview(controller.results) {
+                    readonlyColumn("Domain", Torrent::domain).maxWidth(100)
+                    readonlyColumn("Added", Torrent::elapsedTimestamp)
+                    readonlyColumn("Name", Torrent::filename).minWidth(400)
+                    readonlyColumn("Seeders", Torrent::seeders).maxWidth(100)
+                    readonlyColumn("Leechers", Torrent::leechers).maxWidth(100)
+                    readonlyColumn("Comments", Torrent::commentsCount).maxWidth(100)
+                    readonlyColumn("Downloads", Torrent::completions).maxWidth(100)
 
-            }
+                    smartResize()
+                    fitToParentWidth()
 
-            tableview(controller.results) {
-                readonlyColumn("Domain", Torrent::domain).maxWidth(100)
-                readonlyColumn("Name", Torrent::filename).minWidth(300).maxWidth(800)
-                readonlyColumn("Added", Torrent::elapsedTimestamp)
-                readonlyColumn("Comments", Torrent::commentsCount)
-                readonlyColumn("Downloads", Torrent::completions)
-                readonlyColumn("Seeders", Torrent::seeders)
-                readonlyColumn("Leechers", Torrent::leechers)
-
-                smartResize()
-
-                onDoubleClick {
-                    openUrl(selectedItem)
+                    onDoubleClick {
+                        openUrl(selectedItem)
+                    }
                 }
             }
         }
 
     private fun doSearch() {
-        runAsync {
-            progressIndicator.show()
-            controller.search()
-        } success {
-            progressIndicator.hide()
+        controller.userInput.value?.let {
+            if (it.count() >= 3) {
+                runAsync {
+                    progressIndicator.show()
+                    controller.search()
+                } success {
+                    progressIndicator.hide()
+                }
+            } else {
+                // TODO: Popup ?
+            }
         }
     }
 

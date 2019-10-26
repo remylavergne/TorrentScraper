@@ -11,6 +11,9 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
+/**
+ * Unused at this time
+ */
 
 val client = getUnsafeOkHttpClient()
     .newBuilder()

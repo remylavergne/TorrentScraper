@@ -1,17 +1,20 @@
 import javafx.scene.text.FontWeight
 import javafx.stage.Stage
-import tornadofx.*
+import tornadofx.App
+import tornadofx.Stylesheet
+import tornadofx.launch
+import tornadofx.px
 import views.search.SearchView
 
 
 fun main(args: Array<String>) {
-    launch<YggScraper>(args)
+    launch<TorrentSearchEngine>(args)
 }
 
-class YggScraper : App(SearchView::class, Styles::class) {
+class TorrentSearchEngine : App(SearchView::class, Styles::class) {
     override fun start(stage: Stage) {
         with(stage) {
-            minWidth = 800.0
+            minWidth = 1080.0
             minHeight = 400.0
             super.start(this)
         }
@@ -21,9 +24,11 @@ class YggScraper : App(SearchView::class, Styles::class) {
 class Styles : Stylesheet() {
     init {
         label {
-            fontSize = 14.px
-            fontWeight = FontWeight.BOLD
-            backgroundColor += c("#cecece")
+            fontSize = 12.px
+            fontWeight = FontWeight.NORMAL
+        }
+        tableView {
+
         }
     }
 }

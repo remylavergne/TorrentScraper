@@ -61,17 +61,6 @@ class JSoupParser {
     @Test
     fun leetX() {
 
-        /*val url = "https://1337x.to/search/lion+king/1/"
-
-        val request = LeetXRepository.makeRequest(url, "")*/
-
-        //  if (request.code == 200) {
-
-        // Mock
-
-
-        // val body = request.body?.string()
-
         Jsoup.parse(MockHtmlResponse.leetX()).run {
 
             val elementsByClass = this.getElementsByClass("table-list")
