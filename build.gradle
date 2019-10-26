@@ -21,10 +21,12 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
+    baseName("torrent-search-engine")
+    version("0.2")
 }
 
 group 'TorrentSearchEngine'
-version '0.1'
+version '0.2'
 
 repositories {
     mavenCentral()
