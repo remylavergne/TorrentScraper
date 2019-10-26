@@ -1,7 +1,18 @@
 package Exts
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun Long.toDate(): String {
-    return Date(this).toString()
+
+    var stringValue = this.toString()
+
+    while (stringValue.count() < 13) {
+        stringValue += '0'
+    }
+
+    val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val date = Date(stringValue.toLong())
+
+    return simpleDateFormat.format(date.time)
 }
