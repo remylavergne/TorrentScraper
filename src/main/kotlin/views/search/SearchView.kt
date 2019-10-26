@@ -8,7 +8,7 @@ import javafx.scene.paint.Color
 import models.Torrent
 import tornadofx.*
 
-class SearchView : View() {
+class SearchView : View("Torrent Search Engine") {
 
     private val controller: SearchController by inject()
     private lateinit var progressIndicator: ProgressIndicator
@@ -64,7 +64,7 @@ class SearchView : View() {
                 tableview(controller.results) {
                     readonlyColumn("Domain", Torrent::domain).maxWidth(100)
                     readonlyColumn("Added", Torrent::elapsedTimestamp)
-                    readonlyColumn("Name", Torrent::filename).minWidth(400)
+                    readonlyColumn("Name", Torrent::filename).minWidth(400).maxWidth(800)
                     readonlyColumn("Seeders", Torrent::seeders).maxWidth(100)
                     readonlyColumn("Leechers", Torrent::leechers).maxWidth(100)
                     readonlyColumn("Comments", Torrent::commentsCount).maxWidth(100)
