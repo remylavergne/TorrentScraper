@@ -9,8 +9,8 @@ Multiple features will be implemented.
 
 ## How to start application
 
-- Download latest release : <https://github.com/remylavergne/TorrentSearchEngine/releases/tag/0.2>
-- You have to use JDK 8 max (<https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html>)
+- Download latest release : [Release 0.2](https://github.com/remylavergne/TorrentSearchEngine/releases/tag/0.2)
+- You have to use JDK 8 max [Download JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - Start application
 
 ```terminal
