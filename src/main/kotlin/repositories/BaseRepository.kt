@@ -67,5 +67,6 @@ abstract class BaseRepository {
     }
 
     abstract suspend fun search(request: String): List<Torrent>
+    abstract suspend fun checkServerStatus(): Boolean
 
 }

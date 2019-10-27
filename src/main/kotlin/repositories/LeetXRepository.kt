@@ -1,5 +1,6 @@
 package repositories
 
+import models.LEETX_URL
 import models.LeetX
 import models.Torrent
 import org.jsoup.Jsoup
@@ -44,5 +45,10 @@ object LeetXRepository : BaseRepository() {
             }
         }
         return leetXs
+    }
+
+    override suspend fun checkServerStatus(): Boolean {
+        val response = makeRequest(LEETX_URL, "")
+        return response.code == 200
     }
 }

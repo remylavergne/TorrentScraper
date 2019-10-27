@@ -1,6 +1,7 @@
 package repositories
 
 import models.Torrent
+import models.YGG_URL
 import models.YggTorrent
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -39,5 +40,8 @@ object YggRepository : BaseRepository() {
         return items
     }
 
-
+    override suspend fun checkServerStatus(): Boolean {
+        val response = makeRequest(YGG_URL, "")
+        return response.code == 307
+    }
 }

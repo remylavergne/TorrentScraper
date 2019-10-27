@@ -11,7 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import models.Torrent
 import tornadofx.*
-import views.servers.ServersStatus
+import views.servers.ServersStatusView
 
 class SearchView : View("Torrent Search Engine") {
 
@@ -23,7 +23,7 @@ class SearchView : View("Torrent Search Engine") {
 
         vbox {
 
-            find<ServersStatus>().openModal(
+            find<ServersStatusView>().openModal(
                 stageStyle = StageStyle.UNDECORATED,
                 escapeClosesWindow = true,
                 modality = Modality.WINDOW_MODAL,

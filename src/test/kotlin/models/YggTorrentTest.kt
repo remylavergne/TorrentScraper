@@ -145,6 +145,4 @@ class YggTorrentTest {
     fun `html extract leechers`() {
         assertThat(randomObjectFromHtml.leechers).isEqualTo("0")
     }
-
-
 }

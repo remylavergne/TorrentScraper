@@ -2,11 +2,9 @@ package repositories
 
 import models.Torrent
 
-object YtlRepository : BaseRepository() {
+object ThePirateBayRepository : BaseRepository() {
 
     override suspend fun search(request: String): List<Torrent> {
-
-
         return emptyList()
     }
 
