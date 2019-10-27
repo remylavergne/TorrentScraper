@@ -17,6 +17,15 @@ object LeetXRepository : BaseRepository() {
             val body = response.body?.string()
 
             Jsoup.parse(body).run {
+                /*// Pagination
+                val paginationByClass = this.getElementsByClass("pagination")
+                val pagination = paginationByClass.first().childNodes().filterIsInstance<Element>().first().tagName("ul")
+                    .childNodes()
+                    .filterIsInstance<Element>().filter { it.hasAttr("class") }.first().childNodes()
+                    .filterIsInstance<Element>()
+                    .toString()*/
+
+                // Object
                 val elementsByClass = this.getElementsByClass("table-list")
                 val elements = elementsByClass.first().childNodes().filterIsInstance<Element>()
                     .first { it.tag().normalName() == "tbody" }

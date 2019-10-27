@@ -1,8 +1,6 @@
 package views.search
 
 import javafx.beans.property.SimpleStringProperty
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import models.Torrent
 import repositories.LeetXRepository
 import repositories.YggRepository
@@ -26,14 +24,13 @@ class SearchController : Controller() {
         if (this.userInput.value.length >= 3 && this.userInput.value != this.previousRequest) {
             this.previousRequest = this.userInput.value
 
-                val response = YggRepository.search(userInput.value.replace(" ", "+"))
-                results.addAll(response)
-                resultsCount.set(results.count().toString())
+            val response = YggRepository.search(userInput.value.replace(" ", "+"))
+            results.addAll(response)
+            resultsCount.set(results.count().toString())
 
-                val search = LeetXRepository.search(userInput.value.replace(" ", "+"))
-                results.addAll(search)
-                resultsCount.set(results.count().toString())
-            // TODO: Hide progress bar
+            val search = LeetXRepository.search(userInput.value.replace(" ", "+"))
+            results.addAll(search)
+            resultsCount.set(results.count().toString())
         }
     }
 

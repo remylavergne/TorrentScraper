@@ -5,10 +5,13 @@ import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
+import javafx.stage.Modality
+import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import models.Torrent
 import tornadofx.*
+import views.servers.ServersStatus
 
 class SearchView : View("Torrent Search Engine") {
 
@@ -17,7 +20,17 @@ class SearchView : View("Torrent Search Engine") {
 
     override val root =
         // TODO: Convert to BorderPane
+
         vbox {
+
+            find<ServersStatus>().openModal(
+                stageStyle = StageStyle.UNDECORATED,
+                escapeClosesWindow = true,
+                modality = Modality.WINDOW_MODAL,
+                owner = null,
+                block = true
+            )
+
             /** Search input */
             vbox {
                 paddingTop = 10

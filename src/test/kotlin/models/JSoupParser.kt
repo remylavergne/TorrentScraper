@@ -40,25 +40,6 @@ class JSoupParser {
     }
 
     @Test
-    fun parseYtlHtml() {
-
-        var items = mutableListOf<YTL>()
-
-        Jsoup.connect("https://yts.lt/browse-movies/lion%20king/").get().run {
-
-            val elements = this.getElementsByClass("browse-movie-wrap")
-
-            elements.forEach { element ->
-
-
-                println()
-            }
-
-            println()
-        }
-    }
-
-    @Test
     fun leetX() {
 
         Jsoup.parse(MockHtmlResponse.leetX()).run {
@@ -89,6 +70,11 @@ class JSoupParser {
         //  }
 
         println()
+
+    }
+
+    @Test
+    fun `parse the pirate bay`() {
 
     }
 }

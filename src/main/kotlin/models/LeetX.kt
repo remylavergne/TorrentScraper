@@ -16,7 +16,8 @@ data class LeetX(
     override val completions: String = "-",
     override val seeders: String = "",
     override val leechers: String = "",
-    override val domain: String = "1337x.to"
+    override val domain: String = "1337x.to",
+    val lastPage: String? = null
 ) : Torrent() {
 
     companion object {
@@ -35,7 +36,8 @@ data class LeetX(
                 seeders = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[1])?.groupValues?.last() ?: "0",
                 leechers = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[2])?.groupValues?.last() ?: "0",
                 size = LeetXRegex.SIZE.regex.find(html[4])?.groupValues?.last() ?: "0",
-                commentsCount = LeetXRegex.COMMENTS.regex.find(html[0])?.groupValues?.last() ?: "0"
+                commentsCount = LeetXRegex.COMMENTS.regex.find(html[0])?.groupValues?.last() ?: "0",
+                lastPage = LeetXRegex.LAST_PAGE.regex.find(html[0])?.groupValues?.last()
             )
         }
     }
@@ -45,5 +47,6 @@ enum class LeetXRegex(val regex: Regex) {
     FILE_DETAILS_URL(Regex("<\\/a><a href=\"(.+)\">(.+)<\\/a>")),
     SEEDERS_LEECHERS(Regex(">(\\d+)")),
     SIZE(Regex("\">(.+)<span")),
-    COMMENTS(Regex("<\\/i>(\\d+)<\\/span>"))
+    COMMENTS(Regex("<\\/i>(\\d+)<\\/span>")),
+    LAST_PAGE(Regex("\\/(\\d+)\\/\">Last<\\/a>"))
 }
