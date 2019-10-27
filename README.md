@@ -1,4 +1,4 @@
-# TorrentScraper
+# Torrent Search Engine
 
 This project helps me to learn / improve differents things.
 With it, I practice Kotlin, and I discover TornadoFX, Couroutines, HTTP concepts, Unit Tests, ...
