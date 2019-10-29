@@ -41,7 +41,25 @@ object YggRepository : BaseRepository() {
     }
 
     override suspend fun checkServerStatus(): Boolean {
+
+        var status: Boolean = false
+        var cookiesString = ""
+
         val response = makeRequest(YGG_URL, "")
-        return response.code == 307
+
+        // Get cookies
+        response.headers.forEach { (key, value) ->
+            if (key.toLowerCase() == "set-cookie") {
+                cookiesString += "$value; "
+            }
+        }
+
+        if (response.code == 307) {
+            val makeRequest = makeRequest(response.headers["location"]!!.replace("http", "https"), cookiesString)
+            if (makeRequest.code == 200) {
+                status = true
+            }
+        }
+        return status
     }
 }
