@@ -3,6 +3,7 @@ package views.search
 import javafx.beans.property.SimpleStringProperty
 import models.Torrent
 import repositories.LeetXRepository
+import repositories.ThePirateBayRepository
 import repositories.YggRepository
 import tornadofx.Controller
 import tornadofx.observable
@@ -30,6 +31,10 @@ class SearchController : Controller() {
 
             val search = LeetXRepository.search(userInput.value.replace(" ", "+"))
             results.addAll(search)
+            resultsCount.set(results.count().toString())
+
+            val pirate = ThePirateBayRepository.search(userInput.value.replace(" ", "%"))
+            results.addAll(pirate)
             resultsCount.set(results.count().toString())
         }
     }

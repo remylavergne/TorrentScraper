@@ -1,69 +1,54 @@
 package views.servers
 
+import enums.AllRepositories
+import javafx.scene.control.ProgressBar
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import models.ERROR_IMAGE_URL
 import models.SUCCESS_IMAGE_URL
-import repositories.LeetXRepository
-import repositories.ThePirateBayRepository
-import repositories.YggRepository
+import repositories.BaseRepository
 import tornadofx.Controller
 import tornadofx.Field
+import tornadofx.Fieldset
 import tornadofx.hide
 
 class ServerStatusController : Controller() {
 
-    // ImageViews
-    lateinit var yggStatus: Field
-    lateinit var leetXStatus: Field
-    lateinit var thePirateBayStatus: Field
+    lateinit var fieldset: Fieldset
 
-    init {
-        GlobalScope.launch {
-            checkServersStatus()
+    private var repoViews: MutableMap<Field, BaseRepository> = mutableMapOf()
+
+    fun generateServersViews() {
+        AllRepositories.values().forEach {
+            val field = Field(it.server.name)
+            field.inputs.add(ProgressBar())
+            val imageview = ImageView()
+            imageview.fitHeight = 15.0
+            imageview.fitWidth = 15.0
+            field.inputs.add(imageview)
+            this.fieldset.children.add(field)
+            // Save
+            repoViews[field] = it.server
         }
     }
 
-    private suspend fun checkServersStatus() {
-        val launch = GlobalScope.launch {
-            // YGG
-            async(Dispatchers.Default) {
-                println("Check YGG")
-                val yggStatusResponse = YggRepository.checkServerStatus()
-                yggStatus.inputs[0].hide()
-                (yggStatus.inputs[1] as ImageView).image = if (yggStatusResponse) {
-                    Image(SUCCESS_IMAGE_URL)
-                } else {
-                    Image(ERROR_IMAGE_URL)
+    suspend fun checkServersStatus() {
+        withContext(Dispatchers.IO) {
+            repoViews.forEach { (field, repository) ->
+                async(Dispatchers.IO) {
+                    // Get current field by its id
+                    val available = repository.checkServerStatus()
+                    field.inputs[0].hide()
+                    (field.inputs[1] as ImageView).image = if (available) {
+                        Image(SUCCESS_IMAGE_URL)
+                    } else {
+                        Image(ERROR_IMAGE_URL)
+                    }
                 }
             }
-            // 1337x
-            async(Dispatchers.Default) {
-                println("Check 1337x")
-                val leetxStatusResponse = LeetXRepository.checkServerStatus()
-                leetXStatus.inputs[0].hide()
-                (leetXStatus.inputs[1] as ImageView).image = if (leetxStatusResponse) {
-                    Image(SUCCESS_IMAGE_URL)
-                } else {
-                    Image(ERROR_IMAGE_URL)
-                }
-            }
-            // ThePirateBay
-            async(Dispatchers.Default) {
-                println("Check ThePirateBay")
-                val tpbStatusResponse = ThePirateBayRepository.checkServerStatus()
-                thePirateBayStatus.inputs[0].hide()
-                (thePirateBayStatus.inputs[1] as ImageView).image = if (tpbStatusResponse) {
-                    Image(SUCCESS_IMAGE_URL)
-                } else {
-                    Image(ERROR_IMAGE_URL)
-                }
-            }
-        }
-        launch.join()
-        if (launch.isCompleted) {
-            delay(2_000)
         }
     }
 }

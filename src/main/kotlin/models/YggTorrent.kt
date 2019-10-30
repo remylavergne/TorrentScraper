@@ -84,5 +84,4 @@ enum class YggEndpoints(val endpoint: String) {
     DAILY("https://www2.yggtorrent.pe/engine/ajax_top_query/day"),
     WEEKLY("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
     MONTH("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
-
 }

@@ -12,7 +12,9 @@ import javax.net.ssl.X509TrustManager
 
 abstract class BaseRepository {
 
-    val unsafeClient = getUnsafeOkHttpClient()
+    abstract val name: String
+
+    private val unsafeClient = getUnsafeOkHttpClient()
         .newBuilder()
         .followRedirects(false)
         .build()
@@ -54,6 +56,7 @@ abstract class BaseRepository {
             .header("accept-encoding", "identity")
             .header("accept-language", "en-GB,en-US;q=0.9,en;q=0.8")
             .header("sec-fetch-site", "none")
+            .header("sec-fetch-mode", "navigate")
             .header("upgrade-insecure-requests", "1")
             .header(
                 "user-agent",

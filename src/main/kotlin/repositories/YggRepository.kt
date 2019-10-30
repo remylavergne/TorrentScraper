@@ -8,6 +8,8 @@ import org.jsoup.nodes.Element
 
 object YggRepository : BaseRepository() {
 
+    override val name: String = "YggTorrent"
+
     override suspend fun search(request: String): List<Torrent> {
 
         val items = mutableListOf<YggTorrent>()

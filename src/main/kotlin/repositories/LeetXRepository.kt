@@ -8,6 +8,8 @@ import org.jsoup.nodes.Element
 
 object LeetXRepository : BaseRepository() {
 
+    override val name: String = "1337x"
+
     override suspend fun search(request: String): List<Torrent> {
 
         val leetXs = mutableListOf<LeetX>()
