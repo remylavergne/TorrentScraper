@@ -25,11 +25,11 @@ class SearchController : Controller() {
         if (this.userInput.value.length >= 3 && this.userInput.value != this.previousRequest) {
             this.previousRequest = this.userInput.value
 
-            val response = YggRepository.search(userInput.value.replace(" ", "+"))
+            val response = YggRepository.search(userInput.value)
             results.addAll(response)
             resultsCount.set(results.count().toString())
 
-            val search = LeetXRepository.search(userInput.value.replace(" ", "+"))
+            val search = LeetXRepository.search(userInput.value)
             results.addAll(search)
             resultsCount.set(results.count().toString())
 

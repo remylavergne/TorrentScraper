@@ -15,7 +15,7 @@ object LeetXRepository : BaseRepository() {
     override suspend fun search(request: String): List<Torrent> {
 
         val leetXs = mutableListOf<LeetX>()
-        val url = "https://1337x.to/search/$request/1/"
+        val url = "https://1337x.to/search/${request.replace(" ", "+")}/1/"
         var response: Response? = null
         try {
             response = makeRequest(url, "")

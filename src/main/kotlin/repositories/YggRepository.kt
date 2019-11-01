@@ -14,7 +14,7 @@ object YggRepository : BaseRepository() {
 
         val items = mutableListOf<YggTorrent>()
 
-        Jsoup.connect("https://www2.yggtorrent.pe/engine/search?name=$request&do=search").get().run {
+        Jsoup.connect("https://www2.yggtorrent.pe/engine/search?name=${request.replace(" ", "+")}&do=search").get().run {
 
             val elements = this.getElementsByClass("table-responsive results")
 
