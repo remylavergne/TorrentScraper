@@ -36,16 +36,22 @@ class ServerStatusController : Controller() {
     }
 
     suspend fun checkServersStatus() {
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             repoViews.forEach { (field, repository) ->
                 async(Dispatchers.IO) {
                     // Get current field by its id
-                    val available = repository.checkServerStatus()
-                    field.inputs[0].hide()
-                    (field.inputs[1] as ImageView).image = if (available) {
-                        Image(SUCCESS_IMAGE_URL)
-                    } else {
-                        Image(ERROR_IMAGE_URL)
+                    var available: Boolean = false
+                    try {
+                        available = repository.checkServerStatus()
+                    } catch (e: Exception) {
+
+                    } finally {
+                        field.inputs[0].hide()
+                        (field.inputs[1] as ImageView).image = if (available) {
+                            Image(SUCCESS_IMAGE_URL)
+                        } else {
+                            Image(ERROR_IMAGE_URL)
+                        }
                     }
                 }
             }

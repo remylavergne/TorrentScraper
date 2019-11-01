@@ -1,12 +1,13 @@
 package views.servers
 
+import javafx.event.EventDispatchChain
 import javafx.scene.Parent
 import javafx.scene.text.FontWeight
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import tornadofx.*
 
-class ServersStatusView : Fragment("Servers status") {
+class ServersStatusView(var listener: Verification) : View("Servers status") {
 
     private val controller: ServerStatusController by inject()
 
@@ -14,6 +15,7 @@ class ServersStatusView : Fragment("Servers status") {
         controller.generateServersViews()
         GlobalScope.launch {
             controller.checkServersStatus()
+            listener.checksDone()
         }
         super.onBeforeShow()
     }
@@ -32,4 +34,9 @@ class ServersStatusView : Fragment("Servers status") {
             }
         }
     }
+}
+
+
+interface Verification {
+    fun checksDone()
 }

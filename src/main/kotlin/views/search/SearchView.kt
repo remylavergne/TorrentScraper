@@ -4,32 +4,37 @@ import Exts.unaccent
 import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
+import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.stage.Modality
+import javafx.stage.Stage
 import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import models.Torrent
 import tornadofx.*
 import views.servers.ServersStatusView
+import views.servers.Verification
 
-class SearchView : View("Torrent Search Engine") {
+class SearchView : View("Torrent Search Engine"), Verification {
 
     private val controller: SearchController by inject()
     private lateinit var progressIndicator: ProgressIndicator
+    private var serversStatusModal: ServersStatusView = ServersStatusView(this)
+    private var modal: Stage? = null
 
     override val root =
         // TODO: Convert to BorderPane
 
         vbox {
 
-            find<ServersStatusView>().openModal(
-                stageStyle = StageStyle.UNDECORATED,
-                escapeClosesWindow = true,
-                modality = Modality.WINDOW_MODAL,
-                owner = null,
-                block = true
-            )
+            modal = serversStatusModal.openModal(
+                    stageStyle = StageStyle.UNDECORATED,
+                    escapeClosesWindow = true,
+                    modality = Modality.WINDOW_MODAL,
+                    owner = null,
+                    block = false
+                )
 
             /** Search input */
             vbox {
@@ -94,6 +99,10 @@ class SearchView : View("Torrent Search Engine") {
                 }
             }
         }
+
+    override fun checksDone() {
+        println()
+    }
 
     private fun doSearch() {
         controller.userInput.value?.let {
