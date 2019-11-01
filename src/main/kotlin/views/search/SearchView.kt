@@ -20,6 +20,7 @@ class SearchView : View("Torrent Search Engine"), Verification {
     private var serversStatusModal: ServersStatusView = ServersStatusView(this)
     private var modal: Stage? = null
 
+
     override val root =
         // TODO: Convert to BorderPane
 
@@ -72,7 +73,8 @@ class SearchView : View("Torrent Search Engine"), Verification {
                     }
 
                     progressIndicator = progressindicator {
-                        fitToParentHeight()
+                        maxHeight = 20.0
+                        maxWidth = 20.0
                         hide()
                     }
                 }
@@ -115,12 +117,18 @@ class SearchView : View("Torrent Search Engine"), Verification {
     private fun doSearch() {
         controller.userInput.value?.let {
             if (it.count() >= 3) {
-                progressIndicator.show()
                 GlobalScope.launch {
                     controller.search()
-                    progressIndicator.hide()
                 }
             }
+        }
+    }
+
+    private fun progressBarState(state: Boolean) {
+        if (state) {
+            progressIndicator.show()
+        } else {
+            progressIndicator.hide()
         }
     }
 
@@ -130,5 +138,4 @@ class SearchView : View("Torrent Search Engine"), Verification {
             controller.itemDoubleClicked(it)
         }
     }
-
 }

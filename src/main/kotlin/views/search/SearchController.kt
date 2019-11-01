@@ -1,10 +1,11 @@
 package views.search
 
+import enums.AllRepositories
 import javafx.beans.property.SimpleStringProperty
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import models.Torrent
-import repositories.LeetXRepository
-import repositories.ThePirateBayRepository
-import repositories.YggRepository
 import tornadofx.Controller
 import tornadofx.observable
 
@@ -23,19 +24,18 @@ class SearchController : Controller() {
 
     suspend fun search() {
         if (this.userInput.value.length >= 3 && this.userInput.value != this.previousRequest) {
-            this.previousRequest = this.userInput.value
+            this.previousRequest = this.userInput.value.trim()
+            results.clear()
 
-            val response = YggRepository.search(userInput.value)
-            results.addAll(response)
-            resultsCount.set(results.count().toString())
-
-            val search = LeetXRepository.search(userInput.value)
-            results.addAll(search)
-            resultsCount.set(results.count().toString())
-
-            val pirate = ThePirateBayRepository.search(userInput.value.replace(" ", "%"))
-            results.addAll(pirate)
-            resultsCount.set(results.count().toString())
+            GlobalScope.launch {
+                AllRepositories.values().forEach { repository ->
+                    async {
+                        val response = repository.server.search(userInput.value)
+                        results.addAll(response)
+                        resultsCount.set(results.count().toString())
+                    }
+                }
+            }
         }
     }
 
