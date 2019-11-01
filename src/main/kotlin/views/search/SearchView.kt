@@ -20,6 +20,11 @@ class SearchView : View("Torrent Search Engine"), Verification {
     private var serversStatusModal: ServersStatusView = ServersStatusView(this)
     private var modal: Stage? = null
 
+    override fun onBeforeShow() {
+        controller.progressBar.addListener { _, _, _ -> closeProgressBar() }
+        super.onBeforeShow()
+    }
+
     override val root =
         // TODO: Convert to BorderPane
 
@@ -118,10 +123,13 @@ class SearchView : View("Torrent Search Engine"), Verification {
                 progressIndicator.show()
                 GlobalScope.launch {
                     controller.search()
-                    progressIndicator.hide()
                 }
             }
         }
+    }
+
+    private fun closeProgressBar() {
+        progressIndicator.hide()
     }
 
     private fun openUrl(item: Torrent?) {
@@ -130,5 +138,4 @@ class SearchView : View("Torrent Search Engine"), Verification {
             controller.itemDoubleClicked(it)
         }
     }
-
 }
