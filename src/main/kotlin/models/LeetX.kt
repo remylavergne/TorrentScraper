@@ -10,12 +10,12 @@ data class LeetX(
     override val subCategory: SubCategory? = null,
     override val url: String = "",
     override val filename: String = "",
-    override val commentsCount: String = "",
+    override val commentsCount: Int = 0,
     override val elapsedTimestamp: Long = System.currentTimeMillis(),
     override val size: String = "",
-    override val completions: String = "-",
-    override val seeders: String = "",
-    override val leechers: String = "",
+    override val completions: Int = 0,
+    override val seeders: Int = 0,
+    override val leechers: Int = 0,
     override val domain: String = "1337x.to",
     val lastPage: String? = null
 ) : Torrent() {
@@ -33,10 +33,10 @@ data class LeetX(
             return LeetX(
                 url = LEETX_DOMAIN + LeetXRegex.FILE_DETAILS_URL.regex.find(html[0])?.groupValues?.get(1),
                 filename = LeetXRegex.FILE_DETAILS_URL.regex.find(html[0])?.groupValues?.get(2) ?: "No name",
-                seeders = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[1])?.groupValues?.last() ?: "0",
-                leechers = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[2])?.groupValues?.last() ?: "0",
+                seeders = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[1])?.groupValues?.last()?.toInt() ?: 0,
+                leechers = LeetXRegex.SEEDERS_LEECHERS.regex.find(html[2])?.groupValues?.last()?.toInt() ?: 0,
                 size = LeetXRegex.SIZE.regex.find(html[4])?.groupValues?.last() ?: "0",
-                commentsCount = LeetXRegex.COMMENTS.regex.find(html[0])?.groupValues?.last() ?: "0",
+                commentsCount = LeetXRegex.COMMENTS.regex.find(html[0])?.groupValues?.last()?.toInt() ?: 0,
                 lastPage = LeetXRegex.LAST_PAGE.regex.find(html[0])?.groupValues?.last()
             )
         }

@@ -15,6 +15,7 @@ import views.servers.Verification
 
 class SearchView : View("Torrent Search Engine"), Verification {
 
+
     private val controller: SearchController by inject()
     private lateinit var progressIndicator: ProgressIndicator
     private var serversStatusModal: ServersStatusView = ServersStatusView(this)
