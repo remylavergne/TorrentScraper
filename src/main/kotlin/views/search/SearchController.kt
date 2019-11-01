@@ -27,15 +27,19 @@ class SearchController : Controller() {
             this.previousRequest = this.userInput.value.trim()
             results.clear()
 
-            GlobalScope.launch {
+            val temporaryData = mutableListOf<Torrent>()
+
+            val requestJob = GlobalScope.launch {
                 AllRepositories.values().forEach { repository ->
                     async {
                         val response = repository.server.search(userInput.value)
-                        results.addAll(response)
-                        resultsCount.set(results.count().toString())
+                        temporaryData.addAll(response)
                     }
                 }
             }
+            requestJob.join()
+            results.addAll(temporaryData)
+            resultsCount.set(results.count().toString())
         }
     }
 

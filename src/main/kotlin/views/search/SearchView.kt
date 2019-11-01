@@ -116,10 +116,17 @@ class SearchView : View("Torrent Search Engine"), Verification {
     }
 
     private fun doSearch() {
-        controller.userInput.value?.let {
-            if (it.count() >= 3) {
-                GlobalScope.launch {
-                    controller.search()
+        GlobalScope.launch {
+            controller.userInput.value?.let {
+                if (it.count() >= 3) {
+                    progressBarState(true)
+
+                    val requestJob = GlobalScope.launch {
+                        controller.search()
+                    }
+                    requestJob.join()
+
+                    progressBarState(false)
                 }
             }
         }
