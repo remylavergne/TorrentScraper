@@ -5,17 +5,47 @@ import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
+import javafx.stage.Stage
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import models.Torrent
 import tornadofx.*
+import views.servers.ServersStatusView
+import views.servers.Verification
 
-class SearchView : View() {
+class SearchView : View("Torrent Search Engine"), Verification {
+
 
     private val controller: SearchController by inject()
     private lateinit var progressIndicator: ProgressIndicator
+    private var serversStatusModal: ServersStatusView = ServersStatusView(this)
+    private var modal: Stage? = null
+
 
     override val root =
         // TODO: Convert to BorderPane
+
         vbox {
+
+            menubar {
+                menu("Tools") {
+                    item("Check servers")
+                }
+                menu("Help") {
+                    item("About")
+                    separator()
+                    item("How to use")
+                }
+            }
+
+            /*modal = serversStatusModal.openModal(
+                    stageStyle = StageStyle.UNDECORATED,
+                    escapeClosesWindow = true,
+                    modality = Modality.WINDOW_MODAL,
+                    owner = null,
+                    block = false
+                )*/
+
             /** Search input */
             vbox {
                 paddingTop = 10
@@ -44,7 +74,8 @@ class SearchView : View() {
                     }
 
                     progressIndicator = progressindicator {
-                        fitToParentHeight()
+                        maxHeight = 20.0
+                        maxWidth = 20.0
                         hide()
                     }
                 }
@@ -64,7 +95,7 @@ class SearchView : View() {
                 tableview(controller.results) {
                     readonlyColumn("Domain", Torrent::domain).maxWidth(100)
                     readonlyColumn("Added", Torrent::elapsedTimestamp)
-                    readonlyColumn("Name", Torrent::filename).minWidth(400)
+                    readonlyColumn("Name", Torrent::filename).minWidth(400).maxWidth(800)
                     readonlyColumn("Seeders", Torrent::seeders).maxWidth(100)
                     readonlyColumn("Leechers", Torrent::leechers).maxWidth(100)
                     readonlyColumn("Comments", Torrent::commentsCount).maxWidth(100)
@@ -80,18 +111,32 @@ class SearchView : View() {
             }
         }
 
+    override fun checksDone() {
+        println()
+    }
+
     private fun doSearch() {
-        controller.userInput.value?.let {
-            if (it.count() >= 3) {
-                runAsync {
-                    progressIndicator.show()
-                    controller.search()
-                } success {
-                    progressIndicator.hide()
+        GlobalScope.launch {
+            controller.userInput.value?.let {
+                if (it.count() >= 3) {
+                    progressBarState(true)
+
+                    val requestJob = GlobalScope.launch {
+                        controller.search()
+                    }
+                    requestJob.join()
+
+                    progressBarState(false)
                 }
-            } else {
-                // TODO: Popup ?
             }
+        }
+    }
+
+    private fun progressBarState(state: Boolean) {
+        if (state) {
+            progressIndicator.show()
+        } else {
+            progressIndicator.hide()
         }
     }
 
@@ -101,5 +146,4 @@ class SearchView : View() {
             controller.itemDoubleClicked(it)
         }
     }
-
 }

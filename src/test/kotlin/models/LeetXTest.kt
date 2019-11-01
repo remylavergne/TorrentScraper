@@ -11,7 +11,8 @@ class LeetXTest {
         "<td class=\"coll-3 leeches\">7376</td>",
         "<td class=\"coll-date\">6pm Oct. 11th</td>",
         "<td class=\"coll-4 size mob-uploader\">1.9 GB<span class=\"seeds\">15105</span></td>",
-        "<td class=\"coll-5 uploader\"><a href=\"/user/YTSAGx/\">YTSAGx</a></td>"
+        "<td class=\"coll-5 uploader\"><a href=\"/user/YTSAGx/\">YTSAGx</a></td>",
+        "<a href=\"/search/lion+king/13/\">Last</a>"
     )
 
     private val leetX = LeetX.fromHtml(html)
@@ -44,6 +45,11 @@ class LeetXTest {
     @Test
     fun `parse comments`() {
         assertThat(leetX.commentsCount).isEqualTo("9")
+    }
+
+    @Test
+    fun `parse pagination`() {
+        assertThat(leetX.lastPage).isEqualTo("13")
     }
 
 

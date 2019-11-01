@@ -4,18 +4,18 @@ import enums.Category
 import enums.SubCategory
 import java.util.*
 
-data class YggTorrent(
+class YggTorrent(
     override val id: String = UUID.randomUUID().toString(),
     override val category: Category? = null,
     override val subCategory: SubCategory? = null,
     override val url: String = "",
     override val filename: String = "",
-    override val commentsCount: String = "",
+    override val commentsCount: Int = 0,
     override val elapsedTimestamp: Long = 0,
     override val size: String = "",
-    override val completions: String = "",
-    override val seeders: String = "",
-    override val leechers: String = "",
+    override val completions: Int = 0,
+    override val seeders: Int = 0,
+    override val leechers: Int = 0,
     override val domain: String = ""
 ) : Torrent() {
 
@@ -34,12 +34,12 @@ data class YggTorrent(
                 domain = YggJsonEnums.DOMAIN_NAME.regex.find(list[1])?.groupValues?.last() ?: "No domain",
                 url = YggJsonEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "No url",
                 filename = YggJsonEnums.FILENAME.regex.find(list[1])?.groupValues?.last() ?: "No name",
-                commentsCount = list[3],
+                commentsCount = list[3].toInt(),
                 elapsedTimestamp = YggJsonEnums.ELAPSED_TIME.regex.find(list[4])?.groupValues?.last()?.toLong() ?: 0,
                 size = YggJsonEnums.FILE_SIZE.regex.find(list[5])?.groupValues?.last() ?: "",
-                completions = list[6],
-                seeders = list[7],
-                leechers = list[8]
+                completions = list[6].toInt(),
+                seeders = list[7].toInt(),
+                leechers = list[8].toInt()
             )
         }
 
@@ -52,12 +52,12 @@ data class YggTorrent(
                 domain = YggHtmlEnums.DOMAIN_NAME.regex.find(list[1])?.groupValues?.last() ?: "No domain",
                 url = YggHtmlEnums.FILE_DETAILS_URL.regex.find(list[1])?.groupValues?.last() ?: "No url",
                 filename = YggHtmlEnums.FILENAME.regex.find(list[1])?.groupValues?.last()?.trim() ?: "No name",
-                commentsCount = YggHtmlEnums.COMMENTS.regex.find(list[3])?.groupValues?.last()?.trim() ?: "0",
+                commentsCount = YggHtmlEnums.COMMENTS.regex.find(list[3])?.groupValues?.last()?.toInt() ?: 0,
                 elapsedTimestamp = YggHtmlEnums.ELAPSED_TIME.regex.find(list[4])?.groupValues?.last()?.toLong() ?: 0,
                 size = YggHtmlEnums.BETWEEN_TD.regex.find(list[5])?.groupValues?.last() ?: "0",
-                completions = YggHtmlEnums.BETWEEN_TD.regex.find(list[6])?.groupValues?.last() ?: "0",
-                seeders = YggHtmlEnums.BETWEEN_TD.regex.find(list[7])?.groupValues?.last() ?: "0",
-                leechers = YggHtmlEnums.BETWEEN_TD.regex.find(list[8])?.groupValues?.last() ?: "0"
+                completions = YggHtmlEnums.BETWEEN_TD.regex.find(list[6])?.groupValues?.last()?.toInt() ?: 0,
+                seeders = YggHtmlEnums.BETWEEN_TD.regex.find(list[7])?.groupValues?.last()?.toInt() ?: 0,
+                leechers = YggHtmlEnums.BETWEEN_TD.regex.find(list[8])?.groupValues?.last()?.toInt() ?: 0
             )
         }
     }
@@ -84,5 +84,4 @@ enum class YggEndpoints(val endpoint: String) {
     DAILY("https://www2.yggtorrent.pe/engine/ajax_top_query/day"),
     WEEKLY("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
     MONTH("https://www2.yggtorrent.pe/engine/ajax_top_query/week"),
-
 }

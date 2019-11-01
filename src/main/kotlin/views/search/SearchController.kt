@@ -1,10 +1,11 @@
 package views.search
 
+import enums.AllRepositories
 import javafx.beans.property.SimpleStringProperty
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import models.Torrent
-import models.YggTorrent
-import repositories.LeetXRepository
-import repositories.YggRepository
 import tornadofx.Controller
 import tornadofx.observable
 
@@ -18,14 +19,27 @@ class SearchController : Controller() {
         private set
 
     // Bind values
-    var resultsCount: SimpleStringProperty = SimpleStringProperty(results.count().toString())
+    var resultsCount: SimpleStringProperty = SimpleStringProperty()
     var userInput: SimpleStringProperty = SimpleStringProperty()
 
-    fun search() {
+    suspend fun search() {
         if (this.userInput.value.length >= 3 && this.userInput.value != this.previousRequest) {
-            this.previousRequest = this.userInput.value
-            this.results.addAll(YggRepository.search(this.userInput.value.replace(" ", "+")))
-            this.results.addAll(LeetXRepository.search(this.userInput.value.replace(" ", "+")))
+            this.previousRequest = this.userInput.value.trim()
+            results.clear()
+
+            val temporaryData = mutableListOf<Torrent>()
+
+            val requestJob = GlobalScope.launch {
+                AllRepositories.values().forEach { repository ->
+                    async {
+                        val response = repository.server.search(userInput.value)
+                        temporaryData.addAll(response)
+                    }
+                }
+            }
+            requestJob.join()
+            results.addAll(temporaryData)
+            resultsCount.set(results.count().toString())
         }
     }
 

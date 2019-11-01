@@ -4,7 +4,9 @@ import models.Torrent
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import java.net.SocketTimeoutException
 import java.security.cert.X509Certificate
+import java.time.Duration
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -12,8 +14,12 @@ import javax.net.ssl.X509TrustManager
 
 abstract class BaseRepository {
 
-    val unsafeClient = getUnsafeOkHttpClient()
+    abstract val name: String
+    abstract val domain: String
+
+    private val unsafeClient = getUnsafeOkHttpClient()
         .newBuilder()
+        .connectTimeout(Duration.ofMillis(10_000))
         .followRedirects(false)
         .build()
 
@@ -44,6 +50,7 @@ abstract class BaseRepository {
             .hostnameVerifier(HostnameVerifier { _, _ -> true }).build()
     }
 
+    @Throws(SocketTimeoutException::class)
     fun makeRequest(url: String, cookie: String): Response {
 
         val request = Request.Builder().url(url)
@@ -54,6 +61,7 @@ abstract class BaseRepository {
             .header("accept-encoding", "identity")
             .header("accept-language", "en-GB,en-US;q=0.9,en;q=0.8")
             .header("sec-fetch-site", "none")
+            .header("sec-fetch-mode", "navigate")
             .header("upgrade-insecure-requests", "1")
             .header(
                 "user-agent",
@@ -66,6 +74,7 @@ abstract class BaseRepository {
         return this.unsafeClient.newCall(request).execute()
     }
 
-    abstract fun search(request: String): List<Torrent>
+    abstract suspend fun search(request: String): List<Torrent>
+    abstract suspend fun checkServerStatus(): Boolean
 
 }
