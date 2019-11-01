@@ -9,6 +9,8 @@ import org.jsoup.nodes.Element
 object YggRepository : BaseRepository() {
 
     override val name: String = "YggTorrent"
+    override val domain: String
+        get() = ""
 
     override suspend fun search(request: String): List<Torrent> {
 

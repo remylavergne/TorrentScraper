@@ -6,6 +6,8 @@ import models.Torrent
 object ThePirateBayRepository : BaseRepository() {
 
     override val name: String = "ThePirateBay"
+    override val domain: String
+        get() = ""
     private val cookies: String = ""
 
     override suspend fun search(request: String): List<Torrent> {

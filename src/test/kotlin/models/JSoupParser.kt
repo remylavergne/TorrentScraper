@@ -77,4 +77,13 @@ class JSoupParser {
     fun `parse the pirate bay`() {
 
     }
+
+    @Test
+    fun `parse rarbg`() {
+        val url = "https://rarbgmirror.com/torrents.php?search=lion+king&order=seeders&by=DESC"
+
+
+
+
+    }
 }

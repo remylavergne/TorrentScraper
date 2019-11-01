@@ -11,6 +11,8 @@ import java.net.SocketTimeoutException
 object LeetXRepository : BaseRepository() {
 
     override val name: String = "1337x"
+    override val domain: String
+        get() = ""
 
     override suspend fun search(request: String): List<Torrent> {
 

@@ -15,6 +15,7 @@ import javax.net.ssl.X509TrustManager
 abstract class BaseRepository {
 
     abstract val name: String
+    abstract val domain: String
 
     private val unsafeClient = getUnsafeOkHttpClient()
         .newBuilder()

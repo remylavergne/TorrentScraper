@@ -1,12 +1,10 @@
 package enums
 
-import repositories.BaseRepository
-import repositories.LeetXRepository
-import repositories.ThePirateBayRepository
-import repositories.YggRepository
+import repositories.*
 
 enum class AllRepositories(val server: BaseRepository) {
     YGGTORRENT(YggRepository),
     LEETX(LeetXRepository),
-    THEPIRATEBAY(ThePirateBayRepository)
+    THEPIRATEBAY(ThePirateBayRepository),
+    RARBG(RarbgRepository)
 }
