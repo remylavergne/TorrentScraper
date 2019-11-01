@@ -4,11 +4,8 @@ import Exts.unaccent
 import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
-import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
-import javafx.stage.Modality
 import javafx.stage.Stage
-import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import models.Torrent
@@ -28,13 +25,24 @@ class SearchView : View("Torrent Search Engine"), Verification {
 
         vbox {
 
-            modal = serversStatusModal.openModal(
+            menubar {
+                menu("Tools") {
+                    item("Check servers")
+                }
+                menu("Help") {
+                    item("About")
+                    separator()
+                    item("How to use")
+                }
+            }
+
+            /*modal = serversStatusModal.openModal(
                     stageStyle = StageStyle.UNDECORATED,
                     escapeClosesWindow = true,
                     modality = Modality.WINDOW_MODAL,
                     owner = null,
                     block = false
-                )
+                )*/
 
             /** Search input */
             vbox {
