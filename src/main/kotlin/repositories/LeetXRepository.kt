@@ -6,7 +6,6 @@ import models.Torrent
 import okhttp3.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.net.SocketTimeoutException
 
 object LeetXRepository : BaseRepository() {
 
@@ -18,34 +17,33 @@ object LeetXRepository : BaseRepository() {
 
         val leetXs = mutableListOf<LeetX>()
         val url = "https://1337x.to/search/${request.replace(" ", "+")}/1/"
-        var response: Response? = null
         try {
-            response = makeRequest(url, "")
-        } catch (e: SocketTimeoutException) {
-
-        } finally {
-
-            if (response?.code == 200) {
+            val response = makeRequest(url, "")
+            if (response.code == 200) {
                 val body = response.body?.string()
                 Jsoup.parse(body).run {
                     // Object
                     val elementsByClass = this.getElementsByClass("table-list")
-                    val elements = elementsByClass.first().childNodes().filterIsInstance<Element>()
-                        .first { it.tag().normalName() == "tbody" }
-                        .childNodes().filterIsInstance<Element>()
+                    if (elementsByClass.isNotEmpty()) {
+                        val elements = elementsByClass.first().childNodes().filterIsInstance<Element>()
+                            .first { it.tag().normalName() == "tbody" }
+                            .childNodes().filterIsInstance<Element>()
 
-                    elements.forEach { element ->
-                        val tempList = mutableListOf<String>()
-                        // Elements information extraction here
-                        element.childNodes().filterIsInstance<Element>().forEach {
-                            // Store in a listOf<String>()
-                            tempList.add(it.toString().replace("\n", ""))
+                        elements.forEach { element ->
+                            val tempList = mutableListOf<String>()
+                            // Elements information extraction here
+                            element.childNodes().filterIsInstance<Element>().forEach {
+                                // Store in a listOf<String>()
+                                tempList.add(it.toString().replace("\n", ""))
+                            }
+                            // Create a true LeetX object and store it
+                            leetXs.add(LeetX.fromHtml(tempList))
                         }
-                        // Create a true LeetX object and store it
-                        leetXs.add(LeetX.fromHtml(tempList))
                     }
                 }
             }
+        } catch (e: Exception) {
+
         }
 
         return leetXs
