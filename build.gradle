@@ -22,11 +22,11 @@ shadowJar {
         attributes 'Main-Class': mainClassName
     }
     baseName("torrent-search-engine")
-    version("0.2")
+    version("0.3")
 }
 
 group 'TorrentSearchEngine'
-version '0.2'
+version '0.3'
 
 repositories {
     mavenCentral()

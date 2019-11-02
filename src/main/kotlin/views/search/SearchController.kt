@@ -38,7 +38,7 @@ class SearchController : Controller() {
                 }
             }
             requestJob.join()
-            results.addAll(temporaryData)
+            results.addAll(temporaryData.sortedByDescending { it.seeders })
             resultsCount.set(results.count().toString())
         }
     }

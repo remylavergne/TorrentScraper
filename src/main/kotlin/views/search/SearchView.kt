@@ -5,7 +5,9 @@ import javafx.event.EventHandler
 import javafx.scene.control.ProgressIndicator
 import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
+import javafx.stage.Modality
 import javafx.stage.Stage
+import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import models.Torrent
@@ -29,7 +31,15 @@ class SearchView : View("Torrent Search Engine"), Verification {
 
             menubar {
                 menu("Tools") {
-                    item("Check servers")
+                    item("Check servers").action {
+                        modal = serversStatusModal.openModal(
+                            stageStyle = StageStyle.UTILITY,
+                            escapeClosesWindow = true,
+                            modality = Modality.NONE,
+                            owner = null,
+                            block = false
+                        )
+                    }
                 }
                 menu("Help") {
                     item("About")
@@ -38,13 +48,7 @@ class SearchView : View("Torrent Search Engine"), Verification {
                 }
             }
 
-            /*modal = serversStatusModal.openModal(
-                    stageStyle = StageStyle.UNDECORATED,
-                    escapeClosesWindow = true,
-                    modality = Modality.WINDOW_MODAL,
-                    owner = null,
-                    block = false
-                )*/
+
 
             /** Search input */
             vbox {
