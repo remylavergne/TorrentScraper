@@ -6,7 +6,6 @@ import okhttp3.Request
 import okhttp3.Response
 import java.net.SocketTimeoutException
 import java.security.cert.X509Certificate
-import java.time.Duration
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -19,7 +18,6 @@ abstract class BaseRepository {
 
     private val unsafeClient = getUnsafeOkHttpClient()
         .newBuilder()
-        .connectTimeout(Duration.ofMillis(10_000))
         .followRedirects(false)
         .build()
 

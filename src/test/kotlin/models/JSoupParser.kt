@@ -4,6 +4,7 @@ import models.mock.MockHtmlResponse
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.junit.jupiter.api.Test
+import repositories.YggRepository
 
 class JSoupParser {
 
@@ -80,7 +81,40 @@ class JSoupParser {
 
     @Test
     fun `parse rarbg`() {
-        val url = "https://rarbgmirror.com/torrents.php?search=lion+king&order=seeders&by=DESC"
+        val url = "https://eztv.io/search/how-to-get-away"
+
+
+        val makeRequest = YggRepository.makeRequest(url, "")
+
+        makeRequest.body?.string()?.let { body ->
+
+            Jsoup.parse(body).run {
+
+                val elementsByClass = this.getElementsByClass("forum_header_border")
+
+                if (elementsByClass.isNotEmpty()) {
+                    val filter = elementsByClass.filter { it.tagName() == "tr" }
+
+                    filter.forEach { element ->
+                        var temporaryHtml = ""
+                        element.childNodes().filterIsInstance<Element>().forEach { informations ->
+                            temporaryHtml += informations.toString()
+                        }
+                        // All informations necessary to build an object
+                        println()
+                    }
+
+                }
+
+
+
+                println()
+
+
+            }
+
+        }
+
 
 
 

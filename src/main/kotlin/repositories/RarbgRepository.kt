@@ -19,19 +19,22 @@ object RarbgRepository : BaseRepository() {
 
         try {
             response = makeRequest(url, "")
-        } catch (e: Exception) {
-
-        } finally {
             Jsoup.parse(response?.body?.string()).run {
 
                 val elementsByClass = this.getElementsByClass("lista2")
 
-                elementsByClass.forEach { element ->
-                    val html = element.toString()
-                    val newElement = Rarbg.fromHtml(html)
-                    torrents.add(newElement)
+                if (elementsByClass.isNotEmpty()) {
+                    elementsByClass.forEach { element ->
+                        val html = element.toString()
+                        val newElement = Rarbg.fromHtml(html)
+                        torrents.add(newElement)
+                    }
                 }
             }
+        } catch (e: Exception) {
+            println()
+        } finally {
+
         }
 
         return torrents

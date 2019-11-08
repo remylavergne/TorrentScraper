@@ -43,7 +43,7 @@ object LeetXRepository : BaseRepository() {
                 }
             }
         } catch (e: Exception) {
-
+            println()
         }
 
         return leetXs
