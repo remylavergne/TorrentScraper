@@ -32,7 +32,7 @@ class SearchController : Controller() {
             val requestJob = GlobalScope.launch {
                 AllRepositories.values().forEach { repository ->
                     async {
-                        val response = repository.server.search(userInput.value)
+                        val response = repository.server.search(userInput.value.trim())
                         temporaryData.addAll(response)
                     }
                 }
