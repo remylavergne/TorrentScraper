@@ -6,6 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import models.Torrent
+import services.RequestPeriodicSearch
 import tornadofx.Controller
 import tornadofx.observable
 
@@ -47,5 +48,9 @@ class SearchController : Controller() {
         selectedItem?.let {
             this.lastItemChoosed = selectedItem
         }
+    }
+
+    fun saveRequest() {
+        RequestPeriodicSearch.saveARequest(this.userInput.value.trim(), results.toList())
     }
 }

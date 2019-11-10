@@ -49,7 +49,6 @@ class SearchView : View("Torrent Search Engine"), Verification {
             }
 
 
-
             /** Search input */
             vbox {
                 paddingTop = 10
@@ -74,6 +73,15 @@ class SearchView : View("Torrent Search Engine"), Verification {
                         }
                         action {
                             doSearch()
+                        }
+                    }
+
+                    button("Save this search") {
+                        style {
+                            baseColor = Color.GREEN
+                        }
+                        action {
+                            saveRequest()
                         }
                     }
 
@@ -149,5 +157,13 @@ class SearchView : View("Torrent Search Engine"), Verification {
             hostServices.showDocument(it.url.unaccent())
             controller.itemDoubleClicked(it)
         }
+    }
+
+    /**
+     * Save the request in a local file.
+     * The local file is used to check periodicaly this specific request, and notify user if something is new.
+     */
+    private fun saveRequest() {
+        controller.saveRequest()
     }
 }
