@@ -7,11 +7,13 @@ import java.io.File
 
 object RequestPeriodicSearch {
 
+    private val requestDir = "requests/"
+    private val currentRequestsSaved = mutableListOf<File>()
+
     /**
      * Save the current request with all links found before
      * This method override existing file with the same name
      */
-    // TODO: Check if the file doesn't exist first
     fun saveARequest(request: String, results: List<Torrent>): Boolean {
         // Create Search Object
         val newRequest =
@@ -19,7 +21,7 @@ object RequestPeriodicSearch {
         // Save locally
         try {
             File("requests").mkdir()
-            val newFile = File("requests/" + request.replace(' ', '-') + ".json")
+            val newFile = File(this.requestDir + request.replace(' ', '-') + ".json")
             newFile.writeText(newRequest.toJson())
             return true
         } catch (e: NullPointerException) {
@@ -27,6 +29,16 @@ object RequestPeriodicSearch {
         }
 
         return false
+    }
+
+    fun getSaveRequestsFile() {
+        File(this.requestDir).walk().forEach { file ->
+            this.currentRequestsSaved.add(file)
+        }
+    }
+
+    fun diffBetweenRequests() {
+        
     }
 
     fun deleteARequest(request: String) {
