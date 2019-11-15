@@ -1,5 +1,10 @@
 package services
 
+import enums.AllRepositories
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import models.SavedRequest
 import models.Torrent
 import java.io.File
@@ -7,8 +12,10 @@ import java.io.File
 
 object RequestPeriodicSearch {
 
+    private val temporaryData = mutableMapOf<SavedRequest, List<Torrent>>()
     private val requestDir = "requests/"
     private val currentRequestsSaved = mutableListOf<File>()
+    private val savedRequests = mutableListOf<SavedRequest>()
 
     /**
      * Save the current request with all links found before
@@ -31,15 +38,38 @@ object RequestPeriodicSearch {
         return false
     }
 
-    fun checkSavedRequests() {
+    suspend fun checkSavedRequests() {
+
         getSaveRequestsFile()
+
+        this.temporaryData.clear()
+
+        this.savedRequests.forEach { savedRequest ->
+
+            CoroutineScope(Dispatchers.IO).launch {
+                AllRepositories.values().forEach { repository ->
+                    async {
+                        val response = repository.server.search(savedRequest.request)
+                        temporaryData[savedRequest] = response
+                    }
+                }
+            }
+        }
+
         getUpdateForEachFile()
     }
 
     private fun getSaveRequestsFile() {
+
+        this.currentRequestsSaved.clear()
+
         File(this.requestDir).walk().forEach { file ->
-            this.currentRequestsSaved.add(file)
+            convertFileToObject(file)
         }
+    }
+
+    private fun convertFileToObject(file: File) {
+        this.savedRequests.add(SavedRequest.fromFile(file))
     }
 
     private fun getUpdateForEachFile() {

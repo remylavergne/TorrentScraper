@@ -90,7 +90,7 @@ class SearchView : View("Torrent Search Engine"), Verification {
                             baseColor = Color.GOLD
                         }
                         action {
-                            saveRequest()
+                            checkSavedRequests()
                         }
                     }
 

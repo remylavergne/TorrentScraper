@@ -2,10 +2,7 @@ package views.search
 
 import enums.AllRepositories
 import javafx.beans.property.SimpleStringProperty
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import models.Torrent
 import services.RequestPeriodicSearch
 import tornadofx.Controller
@@ -31,8 +28,7 @@ class SearchController : Controller() {
             results.clear()
 
             this.temporaryData.clear()
-            val requestJob = makeAllRequests()
-            requestJob.join()
+            makeAllRequests().join()
 
             results.addAll(temporaryData.sortedByDescending { it.seeders })
             resultsCount.set(results.count().toString())
@@ -62,6 +58,8 @@ class SearchController : Controller() {
     }
 
     fun checkSavedRequests() {
-        RequestPeriodicSearch.checkSavedRequests()
+        CoroutineScope(Dispatchers.IO).launch {
+            RequestPeriodicSearch.checkSavedRequests()
+        }
     }
 }
