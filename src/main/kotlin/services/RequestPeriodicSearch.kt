@@ -31,14 +31,19 @@ object RequestPeriodicSearch {
         return false
     }
 
-    fun getSaveRequestsFile() {
+    fun checkSavedRequests() {
+        getSaveRequestsFile()
+        getUpdateForEachFile()
+    }
+
+    private fun getSaveRequestsFile() {
         File(this.requestDir).walk().forEach { file ->
             this.currentRequestsSaved.add(file)
         }
     }
 
-    fun diffBetweenRequests() {
-        
+    private fun getUpdateForEachFile() {
+
     }
 
     fun deleteARequest(request: String) {

@@ -85,6 +85,15 @@ class SearchView : View("Torrent Search Engine"), Verification {
                         }
                     }
 
+                    button("Check my saved requests") {
+                        style {
+                            baseColor = Color.GOLD
+                        }
+                        action {
+                            saveRequest()
+                        }
+                    }
+
                     progressIndicator = progressindicator {
                         maxHeight = 20.0
                         maxWidth = 20.0
@@ -165,5 +174,9 @@ class SearchView : View("Torrent Search Engine"), Verification {
      */
     private fun saveRequest() {
         controller.saveRequest()
+    }
+
+    private fun checkSavedRequests() {
+        controller.checkSavedRequests()
     }
 }

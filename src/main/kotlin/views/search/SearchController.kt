@@ -3,6 +3,7 @@ package views.search
 import enums.AllRepositories
 import javafx.beans.property.SimpleStringProperty
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import models.Torrent
@@ -14,6 +15,7 @@ class SearchController : Controller() {
 
     private var previousRequest: String = ""
     private lateinit var lastItemChoosed: Torrent
+    private val temporaryData = mutableListOf<Torrent>()
 
     // Mock
     var results = mutableListOf<Torrent>().observable()
@@ -28,19 +30,24 @@ class SearchController : Controller() {
             this.previousRequest = this.userInput.value.trim()
             results.clear()
 
-            val temporaryData = mutableListOf<Torrent>()
-
-            val requestJob = GlobalScope.launch {
-                AllRepositories.values().forEach { repository ->
-                    async {
-                        val response = repository.server.search(userInput.value.trim())
-                        temporaryData.addAll(response)
-                    }
-                }
-            }
+            this.temporaryData.clear()
+            val requestJob = makeAllRequests()
             requestJob.join()
+
             results.addAll(temporaryData.sortedByDescending { it.seeders })
             resultsCount.set(results.count().toString())
+        }
+    }
+
+    private fun makeAllRequests(): Job {
+
+        return GlobalScope.launch {
+            AllRepositories.values().forEach { repository ->
+                async {
+                    val response = repository.server.search(userInput.value.trim())
+                    temporaryData.addAll(response)
+                }
+            }
         }
     }
 
@@ -52,5 +59,9 @@ class SearchController : Controller() {
 
     fun saveRequest() {
         RequestPeriodicSearch.saveARequest(this.userInput.value.trim(), results.toList())
+    }
+
+    fun checkSavedRequests() {
+        RequestPeriodicSearch.checkSavedRequests()
     }
 }
