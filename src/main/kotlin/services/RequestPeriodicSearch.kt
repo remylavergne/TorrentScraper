@@ -8,6 +8,7 @@ import java.io.File
 object RequestPeriodicSearch {
 
     /**
+     * Save the current request with all links found before
      * This method override existing file with the same name
      */
     // TODO: Check if the file doesn't exist first
@@ -17,7 +18,8 @@ object RequestPeriodicSearch {
             SavedRequest(request = request, allResults = results.map { it.url })
         // Save locally
         try {
-            val newFile = File(request.replace(' ', '-') + ".json")
+            File("requests").mkdir()
+            val newFile = File("requests/" + request.replace(' ', '-') + ".json")
             newFile.writeText(newRequest.toJson())
             return true
         } catch (e: NullPointerException) {
