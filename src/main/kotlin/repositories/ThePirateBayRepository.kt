@@ -13,7 +13,11 @@ object ThePirateBayRepository : BaseRepository() {
     override suspend fun search(request: String): List<Torrent> {
         val getCookies = makeRequest("https://thepiratebay.org/", "")
 
-        val response = makeRequest("https://thepiratebay.org/search/lion%20king/0/99/0", "")
+        try {
+            val response = makeRequest("https://thepiratebay.org/search/lion%20king/0/99/0", "")
+        } catch (e: Exception) {
+
+        }
 
         return emptyList()
     }
