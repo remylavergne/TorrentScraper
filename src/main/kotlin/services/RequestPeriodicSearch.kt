@@ -12,8 +12,9 @@ import java.io.File
 
 object RequestPeriodicSearch {
 
+    private const val REQUEST_DIRECTORY = "requests"
+
     private val temporaryData = mutableMapOf<SavedRequest, List<Torrent>>()
-    private val requestDir = "requests"
     private val currentRequestsSaved = mutableListOf<File>()
     private val savedRequests = mutableListOf<SavedRequest>()
 
@@ -22,13 +23,13 @@ object RequestPeriodicSearch {
      * This method override existing file with the same name
      */
     fun saveARequest(request: String, results: List<Torrent>): Boolean {
-        // Create Search Object
+
         val newRequest =
             SavedRequest(request = request, allResults = results.map { it.url })
-        // Save locally
+
         try {
             File("requests").mkdir()
-            val newFile = File(requestDir + "/" + request.replace(' ', '-') + ".json")
+            val newFile = File(REQUEST_DIRECTORY + "/" + request.replace(' ', '-') + ".json")
             newFile.writeText(newRequest.toJson())
             return true
         } catch (e: NullPointerException) {
@@ -46,14 +47,15 @@ object RequestPeriodicSearch {
 
         this.savedRequests.forEach { savedRequest ->
 
-            CoroutineScope(Dispatchers.IO).launch {
+            val currentJob = CoroutineScope(Dispatchers.IO).launch {
                 AllRepositories.values().forEach { repository ->
                     async {
                         val response = repository.server.search(savedRequest.request)
-                        temporaryData[savedRequest] = response
+                        temporaryData[savedRequest] = response // TODO : /!\ La clef est écrasée car non unique !!!
                     }
                 }
             }
+            currentJob.join()
         }
 
         getUpdateForEachFile()
@@ -65,9 +67,10 @@ object RequestPeriodicSearch {
 
         this.currentRequestsSaved.clear()
 
-        File(requestDir).walkTopDown().forEach { file ->
-            println(file)
-            // convertFileToObject(file) // TODO: It's not a single file, but a file with many path
+        File(REQUEST_DIRECTORY).walkTopDown().forEach { file ->
+            if (file.isFile) {
+                convertFileToObject(file)
+            }
         }
     }
 
