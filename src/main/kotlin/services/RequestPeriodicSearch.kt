@@ -13,7 +13,7 @@ import java.io.File
 object RequestPeriodicSearch {
 
     private val temporaryData = mutableMapOf<SavedRequest, List<Torrent>>()
-    private val requestDir = "requests/"
+    private val requestDir = "requests"
     private val currentRequestsSaved = mutableListOf<File>()
     private val savedRequests = mutableListOf<SavedRequest>()
 
@@ -28,7 +28,7 @@ object RequestPeriodicSearch {
         // Save locally
         try {
             File("requests").mkdir()
-            val newFile = File(this.requestDir + request.replace(' ', '-') + ".json")
+            val newFile = File(requestDir + "/" + request.replace(' ', '-') + ".json")
             newFile.writeText(newRequest.toJson())
             return true
         } catch (e: NullPointerException) {
@@ -61,10 +61,13 @@ object RequestPeriodicSearch {
 
     private fun getSaveRequestsFile() {
 
+        // TODO: Vérifier que le dossier requests existe !
+
         this.currentRequestsSaved.clear()
 
-        File(this.requestDir).walk().forEach { file ->
-            convertFileToObject(file)
+        File(requestDir).walkTopDown().forEach { file ->
+            println(file)
+            // convertFileToObject(file) // TODO: It's not a single file, but a file with many path
         }
     }
 
