@@ -57,6 +57,10 @@ object RequestPeriodicSearch {
         }
     }
 
+    private fun convertFileToObject(file: File) {
+        this.savedRequests.add(SavedRequest.fromFile(file))
+    }
+
     private suspend fun makeRequestForEachFile(): List<Job> {
 
         this.temporaryData.clear()
@@ -78,14 +82,11 @@ object RequestPeriodicSearch {
         return jobs
     }
 
-
+    /**
+     * Comparisons between links found on the previous request and the new one
+     */
     private fun compareIfSomethingIsNew() {
-
-    }
-
-
-    private fun convertFileToObject(file: File) {
-        this.savedRequests.add(SavedRequest.fromFile(file))
+    
     }
 
     fun deleteARequest(request: String) {
