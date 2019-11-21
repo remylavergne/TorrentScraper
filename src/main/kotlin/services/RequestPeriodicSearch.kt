@@ -1,10 +1,7 @@
 package services
 
 import enums.AllRepositories
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import models.SavedRequest
 import models.Torrent
 import java.io.File
@@ -17,6 +14,7 @@ object RequestPeriodicSearch {
     private val temporaryData = mutableMapOf<SavedRequest, List<Torrent>>()
     private val currentRequestsSaved = mutableListOf<File>()
     private val savedRequests = mutableListOf<SavedRequest>()
+    private val requestsWithTorrents = mutableListOf<RequestWithTorrents>()
 
     /**
      * Save the current request with all links found before
@@ -39,26 +37,11 @@ object RequestPeriodicSearch {
         return false
     }
 
-    suspend fun checkSavedRequests() {
-
+    suspend fun checkUpdatesForSavedRequests() {
         getSaveRequestsFile()
-
-        this.temporaryData.clear()
-
-        this.savedRequests.forEach { savedRequest ->
-
-            val currentJob = CoroutineScope(Dispatchers.IO).launch {
-                AllRepositories.values().forEach { repository ->
-                    async {
-                        val response = repository.server.search(savedRequest.request)
-                        temporaryData[savedRequest] = response // TODO : /!\ La clef est écrasée car non unique !!!
-                    }
-                }
-            }
-            currentJob.join()
-        }
-
-        getUpdateForEachFile()
+        val jobs = makeRequestForEachFile()
+        jobs.forEach { it.join() }
+        compareIfSomethingIsNew()
     }
 
     private fun getSaveRequestsFile() {
@@ -74,16 +57,48 @@ object RequestPeriodicSearch {
         }
     }
 
-    private fun convertFileToObject(file: File) {
-        this.savedRequests.add(SavedRequest.fromFile(file))
+    private suspend fun makeRequestForEachFile(): List<Job> {
+
+        this.temporaryData.clear()
+        val jobs = mutableListOf<Job>()
+
+        this.savedRequests.forEach { savedRequest ->
+            val requestWithTorrents = RequestWithTorrents(savedRequest)
+            val currentJob = CoroutineScope(Dispatchers.IO).launch {
+                AllRepositories.values().forEach { repository ->
+                    async {
+                        val response = repository.server.search(savedRequest.request)
+                        requestWithTorrents.torrents.addAll(response)
+                    }
+                }
+            }
+            jobs.add(currentJob)
+            requestsWithTorrents.add(requestWithTorrents)
+        }
+        return jobs
     }
 
-    private fun getUpdateForEachFile() {
 
+    private fun compareIfSomethingIsNew() {
+
+    }
+
+
+    private fun convertFileToObject(file: File) {
+        this.savedRequests.add(SavedRequest.fromFile(file))
     }
 
     fun deleteARequest(request: String) {
 
     }
 
+
 }
+
+/**
+ * Store specific File with all its torrents
+ */
+data class RequestWithTorrents(
+    val savedRequest: SavedRequest,
+    val torrents: MutableList<Torrent> = mutableListOf()
+)

@@ -59,7 +59,7 @@ class SearchController : Controller() {
 
     fun checkSavedRequests() {
         CoroutineScope(Dispatchers.IO).launch {
-            RequestPeriodicSearch.checkSavedRequests()
+            RequestPeriodicSearch.checkUpdatesForSavedRequests()
         }
     }
 }
